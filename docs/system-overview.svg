@@ -10,26 +10,30 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1052.3622"
-   height="744.09448"
+   width="985.96704"
+   height="540.58459"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="system-overview.svg">
+   sodipodi:docname="system-overview.svg"
+   inkscape:export-filename="/home/mattvenn/work/python/energy-wristband/docs/system-overview.png"
+   inkscape:export-xdpi="150"
+   inkscape:export-ydpi="150">
   <defs
      id="defs4">
     <marker
        inkscape:stockid="Arrow1Lend"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow1Lend"
-       style="overflow:visible;">
+       style="overflow:visible">
       <path
          id="path4137"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
-         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
     </marker>
   </defs>
   <sodipodi:namedview
@@ -40,8 +44,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.92192593"
-     inkscape:cx="526.18109"
-     inkscape:cy="372.04724"
+     inkscape:cx="502.16416"
+     inkscape:cy="274.75082"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -49,14 +53,21 @@
      inkscape:window-height="876"
      inkscape:window-x="0"
      inkscape:window-y="24"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     units="mm"
+     fit-margin-top="10"
+     fit-margin-bottom="10"
+     fit-margin-left="10"
+     fit-margin-right="10">
     <inkscape:grid
        type="xygrid"
        id="grid4126"
        empspacing="5"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true" />
+       snapvisiblegridlinesonly="true"
+       originx="-24.016929px"
+       originy="-97.296422px" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -74,9 +85,9 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-308.2677)">
+     transform="translate(-24.016929,-414.48115)">
     <image
-       y="473.90631"
+       y="451.90631"
        x="573.84949"
        id="image3047"
        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAIqCAIAAAA7KGz8AAAAA3NCSVQICAjb4U/gAAAgAElEQVR4
@@ -231,20 +242,9 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
 "
        height="346.85715"
        width="400.70139" />
-    <text
-       xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="45.238628"
-       y="378.12952"
-       id="text3054"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3056"
-         x="45.238628"
-         y="378.12952">Energy Wristband - system overview</tspan></text>
     <g
        id="g4088"
-       transform="translate(213.54973,117.35144)">
+       transform="translate(213.54973,95.35144)">
       <rect
          ry="12.195224"
          transform="translate(0,308.2677)"
@@ -272,7 +272,7 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <g
        id="g4094"
-       transform="translate(212.07376,-116.19232)">
+       transform="translate(212.07376,-138.19232)">
       <rect
          ry="12.195224"
          y="590.82837"
@@ -299,7 +299,7 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <g
        id="g4082"
-       transform="translate(240.66688,4.205367)">
+       transform="translate(240.66688,-17.794633)">
       <rect
          ry="12.195224"
          y="468.25885"
@@ -326,7 +326,7 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <g
        id="g4100"
-       transform="translate(79.04869,55.762172)">
+       transform="translate(79.04869,33.762172)">
       <rect
          ry="12.195224"
          y="668.92572"
@@ -357,7 +357,7 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <g
        id="g4107"
-       transform="translate(111.58926,112.16584)">
+       transform="translate(111.58926,90.16584)">
       <g
          transform="matrix(0.72754959,0,0,0.85859984,48.098436,51.910865)"
          id="g4072">
@@ -425,7 +425,7 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <g
        id="g4119"
-       transform="translate(64.947774,-27.75864)">
+       transform="translate(64.947774,-49.75864)">
       <text
          sodipodi:linespacing="125%"
          id="text3838-3-6-9"
@@ -456,32 +456,32 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 250,512.36218 40,0"
+       d="m 250,490.36218 40,0"
        id="path4128"
        inkscape:connector-curvature="0" />
     <path
        style="color:#000000;fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 390,558.36218 0,30"
+       d="m 390,536.36218 0,30"
        id="path4578"
        inkscape:connector-curvature="0" />
     <path
        style="color:#000000;fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 390,672.36218 0,50"
+       d="m 390,650.36218 0,50"
        id="path5308"
        inkscape:connector-curvature="0" />
     <path
        style="color:#000000;fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 340,808.36218 0,50"
+       d="m 340,786.36218 0,50"
        id="path5492"
        inkscape:connector-curvature="0" />
     <path
        style="color:#000000;fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow1Lend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 440,808.36218 0,50"
+       d="m 440,786.36218 0,50"
        id="path5676"
        inkscape:connector-curvature="0" />
     <rect
        ry="12.195224"
-       y="728.36218"
+       y="706.36218"
        x="60"
        height="80.538208"
        width="190.97139"
@@ -490,44 +490,33 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
     <text
        sodipodi:linespacing="125%"
        id="text6056"
-       y="773.78558"
+       y="751.78558"
        x="66.745941"
        style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        xml:space="preserve"><tspan
-         y="773.78558"
+         y="751.78558"
          x="66.745941"
          id="tspan6058"
          sodipodi:role="line">Accelerometer</tspan><tspan
          id="tspan6060"
-         y="803.78558"
+         y="781.78558"
          x="66.745941"
          sodipodi:role="line" /></text>
     <path
        inkscape:connector-curvature="0"
        id="path6062"
-       d="m 250,766.36218 40,0"
+       d="m 250,744.36218 40,0"
        style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)" />
-    <text
-       xml:space="preserve"
-       style="font-size:20px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="44.472118"
-       y="409.14349"
-       id="text6087"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan6089"
-         x="44.472118"
-         y="409.14349">https://github.com/mattvenn/energy-wristband</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="79.18206"
-       y="789.36011"
+       y="767.36011"
        id="text6091"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan6093"
          x="79.18206"
-         y="789.36011">Future enhancement?</tspan></text>
+         y="767.36011">Future enhancement?</tspan></text>
   </g>
 </svg>
