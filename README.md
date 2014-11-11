@@ -24,7 +24,13 @@ in public places.
 A wristband that tells you energy changes in your home. It connects to a base
 station like a 'current cost' or similar. When a change in energy usage occurs,
 the wristband vibrates and a small LED bargraph shows your current usage from 1
-to 4.
+to 4. 
+
+Realtime energy use can be queried by pressing the button.
+
+An accelerometer could be used to save battery life by putting the wristband to
+sleep when not worn. Alternatively, the base station could decrease
+communications during the night.
 
 ![system overview](docs/system-overview.png)
 

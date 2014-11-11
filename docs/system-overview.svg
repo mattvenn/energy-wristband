@@ -479,44 +479,80 @@ gLsEODP1BWAOAc5JfQGYSYCzUV8A5hPgPNQXgEUEGAAKEOAMjL8ALCXAW6kvACsI8CbqC8A6Arye
        d="m 440,786.36218 0,50"
        id="path5676"
        inkscape:connector-curvature="0" />
-    <rect
-       ry="12.195224"
-       y="706.36218"
-       x="60"
-       height="80.538208"
-       width="190.97139"
-       id="rect6054"
-       style="fill:none;stroke:#000000;stroke-width:1.10000002;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.4000001, 1.10000002;stroke-dashoffset:0" />
-    <text
-       sodipodi:linespacing="125%"
-       id="text6056"
-       y="751.78558"
-       x="66.745941"
-       style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       xml:space="preserve"><tspan
-         y="751.78558"
-         x="66.745941"
-         id="tspan6058"
-         sodipodi:role="line">Accelerometer</tspan><tspan
-         id="tspan6060"
-         y="781.78558"
-         x="66.745941"
-         sodipodi:role="line" /></text>
     <path
        inkscape:connector-curvature="0"
        id="path6062"
-       d="m 250,744.36218 40,0"
+       d="m 250,768.36218 40,0"
        style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)" />
-    <text
-       xml:space="preserve"
-       style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="79.18206"
-       y="767.36011"
-       id="text6091"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan6093"
+    <g
+       id="g6132"
+       transform="translate(0,16)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:1.10000002;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.4000001, 1.10000002;stroke-dashoffset:0"
+         id="rect6054"
+         width="190.97139"
+         height="80.538208"
+         x="60"
+         y="728.36218"
+         ry="12.195224" />
+      <text
+         xml:space="preserve"
+         style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="66.745941"
+         y="769.78558"
+         id="text6056"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan6058"
+           x="66.745941"
+           y="769.78558">Accelerometer</tspan><tspan
+           sodipodi:role="line"
+           x="66.745941"
+           y="799.78558"
+           id="tspan6060" /></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text6091"
+         y="785.36011"
          x="79.18206"
-         y="767.36011">Future enhancement?</tspan></text>
+         style="font-size:14px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           y="785.36011"
+           x="79.18206"
+           id="tspan6093"
+           sodipodi:role="line">Future enhancement?</tspan></text>
+    </g>
+    <g
+       id="g4119-9"
+       transform="translate(-282.03385,-235.59211)">
+      <text
+         sodipodi:linespacing="125%"
+         id="text3838-3-6-9-0"
+         y="934.31293"
+         x="396.71814"
+         style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           id="tspan4080-3"
+           y="934.31293"
+           x="396.71814"
+           sodipodi:role="line">Button</tspan><tspan
+           id="tspan3842-4-24-3-0"
+           y="964.31293"
+           x="396.71814"
+           sodipodi:role="line" /></text>
+      <rect
+         ry="12.195224"
+         y="888.03229"
+         x="343.30307"
+         height="79.182068"
+         width="188.73535"
+         id="rect3068-9-6-3-3-5"
+         style="fill:none;stroke:#000000;stroke-width:1.10000002;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
+       d="m 250,718.36218 40,0"
+       id="path6130"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
