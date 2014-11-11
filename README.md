@@ -22,7 +22,8 @@ in public places.
 ## Introducing... the Energy Wristband
 
 A wristband that tells you energy changes in your home. It connects to a base
-station like a 'current cost' or similar. When a change in energy usage occurs,
+station like a ['current cost' or
+similar](https://www.google.co.uk/search?q=energy+monitor&biw=1309&bih=739&source=lnms&tbm=isch&sa=X&ei=jlRiVP20K7eTsQT1sYCoBA&ved=0CAcQ_AUoAg). When a change in energy usage occurs,
 the wristband vibrates and a small LED bargraph shows your current usage from 1
 to 4. 
 
@@ -34,12 +35,17 @@ communications during the night.
 
 ![system overview](docs/system-overview.png)
 
+## Temporary ownership = maximum usage
+
 Because home energy use is repetitive, wearing the wristband for a few weeks would be all that's needed to understand how the various household appliances use energy.
 
 As only a short time is needed before the wristband does its work, a set is lent
 to a primary school. Every 2 weeks the wristbands are passed on to the next
 children. If an extra set of base stations are lent previously, then the project
 could record changes in habits due to the wristband.
+
+Getting children involved is finally a good use for [pester
+power](http://en.wikipedia.org/wiki/Pester_power)!
 
 ## Get involved
 
