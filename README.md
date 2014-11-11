@@ -6,12 +6,12 @@ Learning about home electrical energy usage with wearable electronics.
 
 Home electricy usage needs to be reduced, and often there is room for easy
 savings. I tried to inspire people with the numbers behind energy use with
-[cursive data](http://cursivedata.org) - a project that brings the numbers to
+[cursive data](http://cursivedata.co.uk) - a project that brings the numbers to
 life using wall-hanging drawing robots.
 
 Over the course of the cursive data project I discovered:
 
-* Energy usage information in the home is boring.
+* Energy usage information in the home is repetitive (boring).
 * A wall hanging drawing robot needs a lot of love and attention to work well.
 
 A nice looking picture that's drawn in an interesting way could well inspire
@@ -19,7 +19,7 @@ someone to change their energy habits. But the method was too complex and
 expensive for the results. The only real applications found for the project were
 in public places.
 
-## The Energy wristband
+## Introducing... the Energy Wristband
 
 A wristband that tells you energy changes in your home. It connects to a base
 station like a 'current cost' or similar. When a change in energy usage occurs,
@@ -39,7 +39,8 @@ could record changes in habits due to the wristband.
 
 I'm looking for:
 
-* Sponsorship in terms of kit (like radios),
-* Money/Hours for development time,
-* Help with promotion/marketing,
+* Sponsorship in terms of kit (like radios, batteries, energy measurement base stations),
+* Money/Hours for electronics/software development time,
+* Money/Hours for 3D design/casting,
+* Help with promotion/marketing/funding,
 * Help organising workshops with schools.
