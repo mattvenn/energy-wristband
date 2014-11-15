@@ -5,6 +5,7 @@ import sys
 import signal
 
 ble_mac = "E4:E2:39:0A:C5:A9"
+ble_host = 'hci0'
 
 def handler(signum, frame):
     print 'Signal handler called with signal', signum
@@ -16,7 +17,7 @@ def handler(signum, frame):
 def send_energy(energy):
     energy = int(energy * 255)
     SEND = hex(energy)[2:].zfill(2)
-    cmd = "/usr/bin/gatttool -b " + ble_mac + " -t random --char-write --handle=0x0011 --value=" + SEND
+    cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-write --handle=0x0011 --value=" + SEND
     print(cmd)
 
     #Set the signal handler and alarm
