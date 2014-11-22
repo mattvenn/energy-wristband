@@ -26,6 +26,7 @@ def get_battery():
     cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-read --handle=0x000e"
     data = do_send(cmd)
     print(data)
+    #this check is broken: better to split and check num chunks
     if 'value/descriptor' in data:
         #got good value
         byte2 = data.split()[2]
