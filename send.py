@@ -9,7 +9,7 @@ ble_mac = "E1:40:D8:62:ED:1A" #other rfduino
 ble_host = 'hci0'
 
 if os.uname()[1] == 'mattsmac':
-    random = '-t random'
+    random = ' -t random '
 else:
     random = ''
 
