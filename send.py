@@ -28,18 +28,35 @@ def send_energy(start,end):
 
 def get_battery():
     cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-read --handle=0x000e"
+    data = do_send(cmd)
+    print(data)
+    #this check is broken: better to split and check num chunks
+    if 'value/descriptor' in data:
+        #got good value
+        byte2 = data.split()[2]
+        byte1 = data.split()[3]
+        hex_val = byte1 + byte2
+        int_val = int(hex_val,16)
+        print(int_val)
+        vcc = 3.3 #should be 3.3
+        batt_level = int_val / 1023.0 * vcc * 2
+        print("batt = %.2fv" % batt_level)
+    else:
+        print("problem with data: " + data)
  # second byte then first byte to get int
  #   int("02e1", 16)
 
 def do_send(cmd):
     #Set the signal handler and alarm
     import subprocess
-    proc = subprocess.Popen(cmd.split())
+    proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
     import time
     time.sleep(6.0)
     returncode = proc.poll()
     if returncode == 0:
         print("success")
+        data = proc.stdout.readline() 
+        return data
     elif returncode == None:
         #hung
         print("hung")
@@ -50,4 +67,5 @@ if __name__ == '__main__':
     start = int(sys.argv[1])
     end = int(sys.argv[2])
     send_energy(start,end)
+    get_battery()
 
