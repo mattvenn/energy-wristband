@@ -9,16 +9,16 @@ import os
 
 max_time = 5 * 60 #seconds before we disregard any large changes
 num_divs = 4 #relate the change as a number from 1 to num_divs
-max_energy = 2500 #watts - this should be adaptive
+max_energy = 3000 #watts - this should be adaptive
 energy_per_div = max_energy / num_divs
 sensitivity = energy_per_div # 100 #watts - only show differences more sensitivity
 
-#limits between 0 and num_divs
+#limits between 1 and num_divs
 def limit(energy):
     if energy > num_divs:
         energy = num_divs
-    if energy < 0:
-        energy = 0
+    if energy < 1:
+        energy = 1
     return energy
     
 def diff(energy):
@@ -40,8 +40,8 @@ def diff(energy):
             #only if it's a big enough difference
             if abs(diff_energy) > sensitivity:
                 #print dt, diff_energy, last_energy, energy
-                last_energy = int(last['energy'] / energy_per_div)
-                current_energy = int(energy / energy_per_div)
+                last_energy = int(last['energy'] / energy_per_div) + 1
+                current_energy = int(energy / energy_per_div) + 1
 
                 last_energy = limit(last_energy)
                 current_energy = limit(current_energy)
