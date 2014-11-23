@@ -46,7 +46,7 @@ def diff(energy):
                 last_energy = limit(last_energy)
                 current_energy = limit(current_energy)
                 print("sending: %d %d" % (last_energy, current_energy))
-                os.system("../send.py %d %d >> send.log" % (last_energy,current_energy))
+                os.system("./send.py %d %d >> send.log" % (last_energy,current_energy))
 
     last['time'] = dt
     last['energy'] = energy
