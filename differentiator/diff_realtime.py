@@ -21,7 +21,7 @@ def limit(energy):
         energy = 1
     return energy
     
-def diff(energy):
+def diff(energy,logging):
     try:
         with open("hist.pk") as fh:
             last = pickle.load(fh)
@@ -29,13 +29,15 @@ def diff(energy):
         last = { 'time' : None, 'energy' : None }
         
     dt = datetime.datetime.now()
-    print("got %f W at %s" % (energy, dt))
+    #logging.info("got %f W at %s" % (energy, dt))
+    last_energy = None
+    current_energy = None
     if last['time']:
         diff_time = (dt - last['time']).total_seconds()
         #if it's been too long between samples, start again
         if diff_time < max_time:
             diff_energy = energy - last['energy']
-            print("diff energy = %f W" % diff_energy )
+            logging.info("diff energy = %f W" % diff_energy )
 
             #only if it's a big enough difference
             if abs(diff_energy) > sensitivity:
@@ -45,14 +47,14 @@ def diff(energy):
 
                 last_energy = limit(last_energy)
                 current_energy = limit(current_energy)
-                print("sending: %d %d" % (last_energy, current_energy))
-                os.system("./send.py %d %d >> send.log" % (last_energy,current_energy))
+                #os.system("../send.py %d %d >> send.log" % (last_energy,current_energy))
 
     last['time'] = dt
     last['energy'] = energy
     with open("hist.pk",'w') as fh:
         pickle.dump(last,fh)
 
+    return (last_energy,current_energy)
 
 if __name__ == '__main__':
     energy = float(sys.argv[1])
