@@ -2,7 +2,6 @@
 import threading
 import time
 import re
-import signal
 import serial
 import send
 import diff_realtime
@@ -32,12 +31,6 @@ logger = logging.getLogger('')
 logger.addHandler(console)
 
 
-def parse_msg(msg):
-    m = re.search( "<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
-    if m != None:
-        if m.group(1) and m.group(2):
-            return float(m.group(1)),float(m.group(2))
-    raise ValueError("couldn't parse msg [%s]" % msg)
 
 def read_serial():
     if not serial_debug:
@@ -48,7 +41,6 @@ def read_serial():
         serial_port.open()
         serial_port.flushInput()
 
-
         #this times out
         logger.info("opened serial with %ds timeout" % serial_port.timeout)
         msg = serial_port.readline()
@@ -58,11 +50,15 @@ def read_serial():
         msg = None
         msg = '<msg><src>CC128-v0.11</src><dsb>00591</dsb><time>03:01:16</time><tmpr>15.7</tmpr><sensor>0</sensor><id>00077</id><type>1</type><ch1><watts>02777</watts></ch1></msg>'
 
-    if msg:
-        return parse_msg(msg)
+    if not msg:
+        raise ValueError("meter read timed out")
 
-    raise ValueError("meter read timed out")
+    m = re.search( "<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
 
+    if m == None:
+        raise ValueError("couldn't parse msg [%s]" % msg)
+
+    return float(m.group(1)),float(m.group(2))
 
 #main loop
 while True:
@@ -71,30 +67,32 @@ while True:
         (temp,power) = read_serial()
         logger.info("meter returned %f W %f C" % (power,temp))
 
-        #see if there's enough of a difference
-        (last,this) = diff_realtime.diff(power,logging)
-        if last != None:
-
-            #send to the wristband
-            s = send.send(last,this,logging)
-            logger.info("start thread for bluetooth")
-            s.start()
-        else:
-            logger.info("not enough difference")
-
         #update internet service
-        logger.info("updating xively")
+        logger.info("start xively thread")
         xively_t = xively(feed_id,logging)
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', power)
         xively_t.start()
 
-        #wait for threads to end
+        #get difference in energy
+        (last,this) = diff_realtime.diff(power,logging)
+
+        #send to the wristband?
+        if last != None:
+            logger.info("start thread for bluetooth")
+            s = send.send(last,this,logging)
+            s.start()
+            s.join()
+            logger.info("bluetooth thread ended")
+        else:
+            logger.info("not enough difference")
+
+        #wait for thread to end
         xively_t.join()
         logger.info("xively thread ended")
 
-        s.join()
-        logger.info("bluetooth thread ended")
-
     except ValueError as e:
         logger.error(e)
+
+    #in case something goes wrong - prevent rapid looping
+    time.sleep(1)
