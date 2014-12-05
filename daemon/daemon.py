@@ -11,7 +11,7 @@ from xively import xively
 #for xively
 feed_id = "130883"
 meter_port = "/dev/ttyUSB0"
-serial_debug = True
+serial_debug = False
 
 import logging
 
