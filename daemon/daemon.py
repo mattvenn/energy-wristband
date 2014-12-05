@@ -31,8 +31,6 @@ console.setFormatter(formatter)
 logger = logging.getLogger('')
 logger.addHandler(console)
 
-class SerialException(Exception):
-    pass
 
 def parse_msg(msg):
     m = re.search( "<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
@@ -64,7 +62,7 @@ def read_serial():
     if msg:
         return parse_msg(msg)
     else:
-        raise SerialException
+        raise ValueError
 
 
 #main loop
@@ -90,5 +88,5 @@ while True:
         xively_t.start()
         xively_t.join()
         logger.info("xively thread ended")
-    except SerialException:
+    except ValueError:
         logger.info("got nothing from meter")
