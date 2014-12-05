@@ -1,6 +1,5 @@
 import mechanize
 import json
-import time
 import threading
 
 class xively(threading.Thread):
@@ -28,10 +27,11 @@ class xively(threading.Thread):
         self.payload['id'] = self.feed_id
         self.payload['datastreams'] = self.data
         url = self.url_base + self.feed_id + "?_method=put"
+
         try:
             self.opener.open(url,json.dumps(self.payload),timeout=5)
+            self.logger.info("sent")
         except mechanize.HTTPError as e:
-            self.logger.error("An HTTP error occurred: %s " % e)
+            self.logger.error("HTTP error: %s" % e)
         except mechanize.URLError as e:        
-            self.logger.error("A URL error occurred: %s " % e)
-        self.logger.info("sent")
+            self.logger.error("URL error: %s" % e)
