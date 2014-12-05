@@ -5,7 +5,7 @@ import re
 import signal
 import serial
 import send
-from differentiator import diff_realtime
+import diff_realtime
 from xively import xively
 
 #for xively
