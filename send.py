@@ -10,11 +10,6 @@ ble_mac = "E4:E2:39:0A:C5:A9"
 ble_mac = "E1:40:D8:62:ED:1A" #other rfduino
 ble_host = 'hci0'
 
-if os.uname()[1] == 'mattsmac':
-    random = ' -t random '
-else:
-    random = ''
-
 class send(threading.Thread):
 
     def __init__(self,start,end,logging,timeout=6):
@@ -25,15 +20,16 @@ class send(threading.Thread):
         self.logger = logging.getLogger('bluetooth')
         self.logger.info("started with %d %d" % (start,end))
 
+
     def run(self):
         #energy = int(energy * 255)
         SEND = hex(self.start_p)[2:].zfill(2) + hex(self.end_p)[2:].zfill(2) 
-        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + random + " --char-write --handle=0x0011 --value=" + SEND
+        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-write --handle=0x0011 --value=" + SEND
         self.logger.debug(cmd)
         self.do_send(cmd)
     
     def get_battery():
-        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + random + " --char-read --handle=0x000e"
+        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-read --handle=0x000e"
         data = do_send(cmd)
         #this check is broken: better to split and check num chunks
         if data:

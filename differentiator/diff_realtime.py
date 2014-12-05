@@ -4,14 +4,12 @@ import sys
 import datetime
 import ipdb
 import pickle
-import os
-
 
 max_time = 5 * 60 #seconds before we disregard any large changes
 num_divs = 4 #relate the change as a number from 1 to num_divs
 max_energy = 3000 #watts - this should be adaptive
 energy_per_div = max_energy / num_divs
-sensitivity = energy_per_div # 100 #watts - only show differences more sensitivity
+sensitivity = energy_per_div #watts - only show differences more sensitivity
 
 #limits between 1 and num_divs
 def limit(energy):
@@ -47,7 +45,6 @@ def diff(energy,logging):
 
                 last_energy = limit(last_energy)
                 current_energy = limit(current_energy)
-                #os.system("../send.py %d %d >> send.log" % (last_energy,current_energy))
 
     last['time'] = dt
     last['energy'] = energy
