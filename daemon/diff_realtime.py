@@ -1,4 +1,7 @@
 #!/usr/bin/python
+"""
+functions to turn instant energy readings into energy differences from 1 to 4
+"""
 
 import sys
 import datetime
