@@ -37,7 +37,7 @@ def parse_msg(msg):
     if m != None:
         if m.group(1) and m.group(2):
             return float(m.group(1)),float(m.group(2))
-    return None,None
+    raise ValueError("couldn't parse msg [%s]" % msg)
 
 def read_serial():
     if not serial_debug:
@@ -52,7 +52,6 @@ def read_serial():
         #this times out
         logger.info("opened serial with %ds timeout" % serial_port.timeout)
         msg = serial_port.readline()
-
         serial_port.close()
     else:
         time.sleep(1)
@@ -61,32 +60,41 @@ def read_serial():
 
     if msg:
         return parse_msg(msg)
-    else:
-        raise ValueError
+
+    raise ValueError("meter read timed out")
 
 
 #main loop
 while True:
     try:
+        #read meter
         (temp,power) = read_serial()
         logger.info("meter returned %f W %f C" % (power,temp))
+
+        #see if there's enough of a difference
         (last,this) = diff_realtime.diff(power,logging)
         if last != None:
+
+            #send to the wristband
             s = send.send(last,this,logging)
             logger.info("start thread for bluetooth")
             s.start()
-            #don't join here, have a queue
-            s.join()
-            logger.info("bluetooth thread ended")
         else:
             logger.info("not enough difference")
 
+        #update internet service
         logger.info("updating xively")
         xively_t = xively(feed_id,logging)
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', power)
         xively_t.start()
+
+        #wait for threads to end
         xively_t.join()
         logger.info("xively thread ended")
-    except ValueError:
-        logger.info("got nothing from meter")
+
+        s.join()
+        logger.info("bluetooth thread ended")
+
+    except ValueError as e:
+        logger.error(e)
