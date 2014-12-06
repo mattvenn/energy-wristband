@@ -5,28 +5,26 @@ import threading
 import subprocess
 import time
 
-ble_mac = "E4:E2:39:0A:C5:A9"
-ble_mac = "E1:40:D8:62:ED:1A" #other rfduino
-ble_host = 'hci0'
 
-class send(threading.Thread):
+class wristband():
 
-    def __init__(self,start,end,logging,timeout=6):
-        threading.Thread.__init__(self)
-        self.start_p = start
-        self.end_p = end
+    ble_mac = "E4:E2:39:0A:C5:A9"
+    ble_mac = "E1:40:D8:62:ED:1A" #other rfduino
+    ble_host = 'hci0'
+
+    def __init__(self,logging,timeout=6):
         self.timeout = timeout
         self.logger = logging.getLogger('bluetooth')
-        self.logger.info("started with %d %d" % (start,end))
 
-    def run(self):
-        send = hex(self.start_p)[2:].zfill(2) + hex(self.end_p)[2:].zfill(2) 
-        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-write --handle=0x0011 --value=" + send
+    def send(self,start,end):
+        self.logger.info("sending %d %d" % (start,end))
+        send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2) 
+        cmd = "/usr/bin/gatttool -i " + wristband.ble_host + " -b " + wristband.ble_mac + " -t random --char-write --handle=0x0011 --value=" + send
         self.logger.debug(cmd)
         self.run_command(cmd)
     
-    def get_battery():
-        cmd = "/usr/bin/gatttool -i " + ble_host + " -b " + ble_mac + " -t random --char-read --handle=0x000e"
+    def get_battery(self,):
+        cmd = "/usr/bin/gatttool -i " + wristband.ble_host + " -b " + wristband.ble_mac + " -t random --char-read --handle=0x000e"
         data = run_command(cmd)
 
         if data:
@@ -60,7 +58,7 @@ class send(threading.Thread):
             return data
         elif returncode == None:
             #hung
-            self.logger.info("hung")
+            self.logger.warning("hung")
             proc.terminate()
     
 if __name__ == '__main__':
