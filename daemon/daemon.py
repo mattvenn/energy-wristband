@@ -54,7 +54,6 @@ while True:
         (last, this) = diff_realtime.diff(power, logging)
 
         # send to the wristband?
-        last = 1; this = 2
         if last is not None:
             logger.info("sending to wristband")
             # this blocks but times out
