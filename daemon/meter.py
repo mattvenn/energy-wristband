@@ -4,16 +4,17 @@ import re
 
 serial_debug = True
 
-def read_meter(meter_port,timeout=10):
+
+def read_meter(meter_port, timeout=10):
     if not serial_debug:
         serial_port = serial.Serial()
-        serial_port.port=meter_port
-        serial_port.baudrate=57600
-        serial_port.timeout=timeout
+        serial_port.port = meter_port
+        serial_port.baudrate = 57600
+        serial_port.timeout = timeout
         serial_port.open()
         serial_port.flushInput()
 
-        #this times out
+        # this times out
         logger.info("opened serial with %ds timeout" % serial_port.timeout)
         msg = serial_port.readline()
         serial_port.close()
@@ -25,9 +26,9 @@ def read_meter(meter_port,timeout=10):
     if not msg:
         raise ValueError("meter read timed out")
 
-    m = re.search( "<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
+    m = re.search("<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
 
-    if m == None:
+    if m is None:
         raise ValueError("couldn't parse msg [%s]" % msg)
 
-    return float(m.group(1)),float(m.group(2))
+    return float(m.group(1)), float(m.group(2))
