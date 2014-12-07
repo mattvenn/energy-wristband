@@ -2,10 +2,10 @@ import serial
 import time
 import re
 
-serial_debug = True
+serial_debug = False
 
 
-def read_meter(meter_port, timeout=10):
+def read_meter(meter_port, logger, timeout=10):
     if not serial_debug:
         serial_port = serial.Serial()
         serial_port.port = meter_port

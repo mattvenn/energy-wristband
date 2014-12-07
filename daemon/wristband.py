@@ -11,7 +11,7 @@ class wristband():
     ble_mac = "E4:E2:39:0A:C5:A9"
     ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
     ble_host = 'hci0'
-    gatt = "/usr/bin/gatttool"
+    gatt = "./gatttool"
 
     def __init__(self, logging, timeout=6):
         self.timeout = timeout
@@ -22,12 +22,12 @@ class wristband():
     def send(self, start, end):
         self.logger.info("sending %d %d" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
-        cmd = self.base_cmd + "--char-write --handle=0x0011 --value=" + send
+        cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.logger.debug(cmd)
         self.run_command(cmd)
 
     def get_battery(self):
-        cmd = self.base_cmd + "--char-read --handle=0x000e"
+        cmd = self.base_cmd + " --char-read --handle=0x000e"
         data = run_command(cmd)
 
         if data:
@@ -63,6 +63,10 @@ class wristband():
             # hung
             self.logger.warning("hung")
             proc.terminate()
+        else:
+            # an error?
+            self.logger.warning("unexpected return code from gatttool: %d" % returncode)
+
 
 if __name__ == '__main__':
     # from 0 to 1

@@ -39,7 +39,7 @@ logger.addHandler(console)
 while True:
     try:
         # read meter, might throw an exception
-        (temp, power) = read_meter(meter_port, meter_timeout)
+        (temp, power) = read_meter(meter_port, logger, meter_timeout)
         logger.info("meter returned %f W %f C" % (power, temp))
 
         # update internet service - run as a daemon thread
@@ -54,6 +54,7 @@ while True:
         (last, this) = diff_realtime.diff(power, logging)
 
         # send to the wristband?
+        last = 1; this = 2
         if last is not None:
             logger.info("sending to wristband")
             # this blocks but times out
