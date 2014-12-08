@@ -15,10 +15,10 @@ xively_timeout = 10
 # meter
 meter_port = "/dev/ttyUSB0"
 meter_timeout = 10
-battery_interval = 60 * 5  # seconds
 
 # wrist band
 wristband_timeout = 6
+data_interval = 60 * 5  # seconds
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
@@ -37,7 +37,7 @@ logger = logging.getLogger('')
 logger.addHandler(console)
 
 # main loop
-last_battery = time.time()
+last_data = time.time()
 wb = wristband(logging, wristband_timeout)
 while True:
     try:
@@ -62,11 +62,12 @@ while True:
         else:
             logger.info("not enough difference")
 
-	# fetch battery info?
-	if time.time() > last_battery + battery_interval:
-            battery = wb.get_battery()
-	    last_battery = time.time()
+        # fetch data from wristband?
+        if time.time() > last_data + data_interval:
+            (battery, uptime) = wb.get()
+            last_data = time.time()
             xively_t.add_datapoint('wb-battery', battery)
+            xively_t.add_datapoint('wb-uptime', uptime)
 
         logger.info("start xively thread")
         xively_t.daemon = True
