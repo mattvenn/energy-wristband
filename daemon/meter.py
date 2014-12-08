@@ -4,6 +4,10 @@ import re
 
 serial_debug = False
 
+"""
+see current cost XML format doc here:
+http://www.currentcost.com/cc128/xml.htm
+"""
 
 def read_meter(meter_port, logger, timeout=10):
     if not serial_debug:
