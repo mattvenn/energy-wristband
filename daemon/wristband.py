@@ -25,23 +25,32 @@ class wristband():
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
 
-    def get_battery(self):
-        self.logger.info("requesting battery info")
+    def unpack(self, data, int_num):
+        offset = int_num * 4 + 2
+        byte2 = data.split()[offset]
+        byte1 = data.split()[offset+1]
+        hex_val = byte1 + byte2
+        return int(hex_val, 16)
+
+    def get(self):
+        self.logger.info("requesting data")
         cmd = self.base_cmd + " --char-read --handle=0x000e"
         data = self.run_command(cmd)
 
         if data:
-            if len(data.split()) == 6:
-                # got good value
-                byte2 = data.split()[2]
-                byte1 = data.split()[3]
-                hex_val = byte1 + byte2
-                int_val = int(hex_val, 16)
-                print(int_val)
+            # expecting 4 bytes for each int sent
+            if len(data.split()) == 2 + 4 + 4:
+
+                # unpack
+                batt_adc = self.unpack(data, 0)
+                uptime = self.unpack(data, 1)
+
+                # convert batt
                 vcc = 3.3  # should be 3.3
-                batt_level = int_val / 1023.0 * vcc * 2
-                self.logger.info("batt = %.2fv" % batt_level)
-                return batt_level
+                batt_level = batt_adc / 1023.0 * vcc * 2
+
+                self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
+                return(batt_level, uptime)
             else:
                 raise ValueError("problem parsing data: " + data)
         else:
@@ -74,7 +83,8 @@ if __name__ == '__main__':
     # from 0 to 1
     start = int(sys.argv[1])
     end = int(sys.argv[2])
-    s = wristband(start, end)
-    s.start()
-    s.join()
-    # get_battery()
+    import logging
+    logging.warning("starting")
+    s = wristband(logging)
+    s.send(start, end)
+    s.get()
