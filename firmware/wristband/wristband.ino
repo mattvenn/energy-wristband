@@ -88,7 +88,17 @@ void RFduinoBLE_onReceive(char *data, int len)
       indicate(data[0],data[1]);
   }  
  //   analogWrite(led, data[0]);
-    RFduinoBLE.sendInt(readDAC());
+    typedef struct Msg
+    {
+        int batt;
+        int uptime;
+    };
+    Msg msg;
+    msg.batt = readDAC();
+    msg.uptime = millis() / 1000;
+    char txBuf[32];
+    memcpy(&txBuf,&msg,sizeof(msg));
+    RFduinoBLE.send(txBuf, sizeof(msg));
 }
 void indicate(int start, int end)
 {
