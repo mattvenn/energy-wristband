@@ -23,12 +23,12 @@ class wristband():
         self.logger.info("sending %d %d" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
-        self.logger.debug(cmd)
         self.run_command(cmd)
 
     def get_battery(self):
+        self.logger.info("requesting battery info")
         cmd = self.base_cmd + " --char-read --handle=0x000e"
-        data = run_command(cmd)
+        data = self.run_command(cmd)
 
         if data:
             if len(data.split()) == 6:
@@ -40,15 +40,17 @@ class wristband():
                 print(int_val)
                 vcc = 3.3  # should be 3.3
                 batt_level = int_val / 1023.0 * vcc * 2
-                print("batt = %.2fv" % batt_level)
+                self.logger.info("batt = %.2fv" % batt_level)
+                return batt_level
             else:
-                print("problem with data: " + data)
+                raise ValueError("problem parsing data: " + data)
         else:
-            print("got no data")
+            raise ValueError("got no data")
 
     def run_command(self, cmd):
         proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         self.logger.info("waiting %d seconds for process" % self.timeout)
+        self.logger.debug(cmd)
 
         # wait
         time.sleep(self.timeout)

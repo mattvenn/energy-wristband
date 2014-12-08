@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 import threading
 import time
 import logging
@@ -15,27 +15,30 @@ xively_timeout = 10
 # meter
 meter_port = "/dev/ttyUSB0"
 meter_timeout = 10
+battery_interval = 60 * 5  # seconds
 
 # wrist band
 wristband_timeout = 6
 
-#  set up logging to file - see previous section for more details
+# set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
 logging.basicConfig(level=logging.DEBUG,
                     format=log_format,
                     filename='reader.log',
                     filemode='w')
 
-#  define a Handler which writes INFO messages or higher to the sys.stderr
+# define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 formatter = logging.Formatter(log_format)
 console.setFormatter(formatter)
-#  add the handler to the root logger
+# add the handler to the root logger
 logger = logging.getLogger('')
 logger.addHandler(console)
 
 # main loop
+last_battery = time.time()
+wb = wristband(logging, wristband_timeout)
 while True:
     try:
         # read meter, might throw an exception
@@ -43,12 +46,9 @@ while True:
         logger.info("meter returned %f W %f C" % (power, temp))
 
         # update internet service - run as a daemon thread
-        logger.info("start xively thread")
         xively_t = xively(feed_id, logging, timeout=xively_timeout)
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', power)
-        xively_t.daemon = True
-        xively_t.start()
 
         # get difference in energy
         (last, this) = diff_realtime.diff(power, logging)
@@ -57,10 +57,20 @@ while True:
         if last is not None:
             logger.info("sending to wristband")
             # this blocks but times out
-            wb = wristband(logging, wristband_timeout)
             wb.send(last, this)
+            xively_t.add_datapoint('wb-this', this)
         else:
             logger.info("not enough difference")
+
+	# fetch battery info?
+	if time.time() > last_battery + battery_interval:
+            battery = wb.get_battery()
+	    last_battery = time.time()
+            xively_t.add_datapoint('wb-battery', battery)
+
+        logger.info("start xively thread")
+        xively_t.daemon = True
+        xively_t.start()
 
     except ValueError as e:
         logger.error(e)
