@@ -32,7 +32,7 @@ def read_meter(meter_port, logger, timeout=10):
         raise ValueError("meter read timed out")
 
     # could be a history message (on every odd hour)
-    m = re.search("<hist>", msg)
+    m = re.search("</?hist>", msg)
     if m is not None:
         raise ValueError("ignoring history message")
 

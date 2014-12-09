@@ -64,8 +64,8 @@ while True:
 
         # fetch data from wristband?
         if time.time() > last_data + data_interval:
-            (battery, uptime) = wb.get()
             last_data = time.time()
+            (battery, uptime) = wb.get()
             xively_t.add_datapoint('wb-battery', battery)
             xively_t.add_datapoint('wb-uptime', uptime)
 

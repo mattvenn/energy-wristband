@@ -1,10 +1,12 @@
 # Todo
 
-- fetch battery life and uptime from wristband, post to xively
 - only post once per minute for xively
+- update wb with current energy at beginning or if it reboots
 
 # Done
 
++ fetch battery life and uptime from wristband, post to xively
+	+ if fails, wait for a bit before trying again
 + need to maintain a small queue of bluetooth and xively threads, joining later?
     - xively threads don't need limiting because they will time out after 30s
 + what happens if thread throws exception, will parent catch it - still need to
