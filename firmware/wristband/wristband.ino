@@ -1,159 +1,178 @@
 #include <RFduinoBLE.h>
 
-int count = 0;
-const int num_leds = 4;
-int leds[num_leds] = {2,3,4,5};
 // default serial RX & TX are on pins 0 & 1 
-int batt_level = 1;
 int button = 0;
+int batt_level = 1;
+
+const int num_leds = 4;
+int leds[num_leds] = {2, 3, 4, 5};
 int motor = 6;
+
+// timings
 int motor_on = 50;
 int motor_off = 300;
 
 int last_reading = 0;
 
-    typedef struct Msg
-    {
-        int batt;
-        int uptime;
-    };
-    Msg msg;
+// struct to send messages back
+typedef struct Msg
+{
+    int batt;
+    int uptime;
+};
 
-    char txBuf[32];
+Msg msg;
+
+// message buffer
+char txBuf[32];
+
 // #define SERIAL_DEBUG
-void setup() {
-  RFduinoBLE.advertisementData = "temp";
-  // try this:
-  RFduinoBLE.advertisementInterval = 1000; 
-    pinMode(button,INPUT_PULLUP);
-    pinMode(batt_level,OUTPUT);
-    digitalWrite(batt_level,LOW);
-    RFduino_pinWake(button,LOW);
+
+void setup() 
+{
+    RFduinoBLE.advertisementData = "energy-wristband";
+
+    // try this. Don't think this works - has to be changed in the libs:
+    // definitely makes a difference to power consumption
+    RFduinoBLE.advertisementInterval = 1000; 
+
+    //initialise pins
+    pinMode(button, INPUT_PULLUP);
+    pinMode(batt_level, OUTPUT);
+
+    pinMode(motor, OUTPUT);
+    digitalWrite(motor, LOW);
+
+    // leds
+    for( int i = 0 ; i<num_leds; i ++)
+    {
+        pinMode(leds[i], OUTPUT);
+    }
+
+    //check power consumption on this
+    digitalWrite(batt_level, LOW);
+    RFduino_pinWake(button, LOW);
+
     #ifdef SERIAL_DEBUG
         Serial.begin(9600);
     #endif
 
-  // start the BLE stack
-  RFduinoBLE.begin();
-   pinMode(motor,OUTPUT);
-  digitalWrite(motor,LOW);
-  for( int i = 0 ; i<num_leds; i ++)
-  {
-      pinMode(leds[i],OUTPUT);
-     
-  }
-//indicate(1,4);
+    // start the BLE stack
+    RFduinoBLE.begin();
+
+    // show that we've started
     for(int i = 0; i < 4 ; i ++)
     {
-    bar_graph(4);
-    delay(100);
-    bar_graph(0);
-    delay(100);
+        bar_graph(4);
+        delay(100);
+        bar_graph(0);
+        delay(100);
     }
+
+    // initialise watchdog
     NRF_WDT->CRV = 10 * 32768; // Timeout period of 10 s
     NRF_WDT->TASKS_START = 1; // Watchdog start
 }
 
 
+// reading the dac makes a 300uA difference to power consumption, which
+// stays high after a read. So this turns it off after use
 int readDAC()
 {
-  // battery read stuff
   NRF_ADC->TASKS_START = 1;
-  pinMode(batt_level,INPUT);
+
+  pinMode(batt_level, INPUT);
   delay(10);
-  //this adds about 300ua to draw
+
   int batt = analogRead(batt_level); 
+
   NRF_ADC->TASKS_STOP = 1;
-  pinMode(batt_level,OUTPUT);
-  digitalWrite(batt_level,LOW);
+
+  pinMode(batt_level, OUTPUT);
+  digitalWrite(batt_level, LOW);
+
   return batt;
 }
-void loop() {
-  // sleeep till we're woken by BLE
-   RFduino_ULPDelay(5000);
-   NRF_WDT->RR[0] = WDT_RR_RR_Reload;
 
-  //if button pressed, show last reading
-  if(RFduino_pinWoke(button))
-  {
-    RFduino_resetPinWake(button);
-    bar_graph(last_reading);
-    delay(500);
-    bar_graph(0);
-  }
+void loop()
+{
+    // sleep 5 seconds or till we're woken by BLE or button press
+    RFduino_ULPDelay(5000);
+
+    // reset watchdog
+    NRF_WDT->RR[0] = WDT_RR_RR_Reload;
+
+    // if button pressed, show last reading
+    if(RFduino_pinWoke(button))
+    {
+        RFduino_resetPinWake(button);
+        bar_graph(last_reading);
+        delay(500);
+        bar_graph(0);
+    }
+
+    // send back battery and uptime - maybe not every 5 seconds?
     msg.batt = readDAC();
     msg.uptime = millis() / 1000;
-    memcpy(&txBuf,&msg,sizeof(msg));
+    memcpy(&txBuf, &msg, sizeof(msg));
     RFduinoBLE.send(txBuf, sizeof(msg));
 }
 
+// when we receive data
 void RFduinoBLE_onReceive(char *data, int len)
 {
- 
-  if(len == 2)
-  {
-    #ifdef SERIAL_DEBUG
-    Serial.println(data[0],DEC);
-    Serial.println(data[1],DEC);
-    #endif
-      last_reading = data[1];
-      indicate(data[0],data[1]);
-  }  
- //   analogWrite(led, data[0]);
+    if(len == 2)
+    {
+        #ifdef SERIAL_DEBUG
+        Serial.println(data[0], DEC);
+        Serial.println(data[1], DEC);
+        #endif
+        last_reading = data[1];
+        indicate(data[0], data[1]);
+    }  
+    // if len == 1 then just set the last_reading, but don't flash?
 }
+
+// show the energy change with lights and motor pulses
 void indicate(int start, int end)
 {
-  if( start < end )
-  {
-      for(int i = start; i <= end; i ++)
-      {
-        bar_graph(i);
-        vibe();
-      }
-  }
-  else
-  {
-      for(int i = start; i >= end; i --)
-      {
-        bar_graph(i);
-        vibe();
-      }
-  }
+    if( start < end )
+    {
+        for(int i = start; i <= end; i ++)
+        {
+            bar_graph(i);
+            vibe();
+        }
+    }
+    else
+    {
+        for(int i = start; i >= end; i --)
+        {
+            bar_graph(i);
+            vibe();
+        }
+    }
 
-  //lights off
-  bar_graph(0);
+    // lights off
+    bar_graph(0);
 }
 
+// can we do this with PWM?
 void vibe()
 {
-    digitalWrite(motor,HIGH);
+    digitalWrite(motor, HIGH);
     delay(motor_on);
-    digitalWrite(motor,LOW);
+    digitalWrite(motor, LOW);
     delay(motor_off);
 }
+
 void bar_graph(int level)
 {
-  //all off
+  // all off
   for(int i=0; i < num_leds; i ++)
-        digitalWrite(leds[i],LOW); 
+        digitalWrite(leds[i], LOW); 
 
-  //turn on what we need
+  // turn on what we need
   for(int i=0; i < level; i ++)
-    digitalWrite(leds[i],HIGH); 
+    digitalWrite(leds[i], HIGH); 
 }
-/* not sure if this is needed
-void RFduinoBLE_onConnect()
-{
-  // request central role use a different connection interval in the given range
-  // the central role may reject the request (or even pick a value outside the range)
-  // we will request something in the 900ms to 1100ms range
-  // the actual rate the iPhone uses is 1098ms
-  // the best way to get the connection interval you are after is trail and error
-  // if the iPhone rejects the request, the connection interval will be the default (25ms)
-  RFduinoBLE.updateConnInterval(900, 1100);
-
-  // note: you cannot use delay()/RFduinoBLE.getConnInterval() here to determine which
-  // connection interval the iPhone selected - getConnInterval() must be called from
-  // either loop() or onReceive()
-}
-*/
