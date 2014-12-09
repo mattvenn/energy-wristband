@@ -12,6 +12,14 @@ int motor_off = 300;
 
 int last_reading = 0;
 
+    typedef struct Msg
+    {
+        int batt;
+        int uptime;
+    };
+    Msg msg;
+
+    char txBuf[32];
 // #define SERIAL_DEBUG
 void setup() {
   RFduinoBLE.advertisementData = "temp";
@@ -73,6 +81,10 @@ void loop() {
     delay(500);
     bar_graph(0);
   }
+    msg.batt = readDAC();
+    msg.uptime = millis() / 1000;
+    memcpy(&txBuf,&msg,sizeof(msg));
+    RFduinoBLE.send(txBuf, sizeof(msg));
 }
 
 void RFduinoBLE_onReceive(char *data, int len)
@@ -88,17 +100,6 @@ void RFduinoBLE_onReceive(char *data, int len)
       indicate(data[0],data[1]);
   }  
  //   analogWrite(led, data[0]);
-    typedef struct Msg
-    {
-        int batt;
-        int uptime;
-    };
-    Msg msg;
-    msg.batt = readDAC();
-    msg.uptime = millis() / 1000;
-    char txBuf[32];
-    memcpy(&txBuf,&msg,sizeof(msg));
-    RFduinoBLE.send(txBuf, sizeof(msg));
 }
 void indicate(int start, int end)
 {
