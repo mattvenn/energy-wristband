@@ -18,7 +18,7 @@ meter_timeout = 10
 
 # wrist band
 wristband_timeout = 6
-data_interval = 60 * 5  # seconds
+data_interval = 60 * 10  # seconds
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
