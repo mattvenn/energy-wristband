@@ -24,8 +24,7 @@ data_interval = 60 * 10  # seconds
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
 logging.basicConfig(level=logging.DEBUG,
                     format=log_format,
-                    filename='reader.log',
-                    filemode='w')
+                    filename='reader.log')
 
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
