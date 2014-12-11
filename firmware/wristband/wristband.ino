@@ -1,4 +1,7 @@
 #include <RFduinoBLE.h>
+/*
+http://www.eetimes.com/document.asp?doc_id=1278927
+*/
 
 // default serial RX & TX are on pins 0 & 1 
 int button = 0;
@@ -30,13 +33,13 @@ char txBuf[32];
 
 void setup() 
 {
-    RFduinoBLE.advertisementData = "energy-wristband";
+    //keep this small because total is 15 bytes for this and advertisement data
+    RFduinoBLE.deviceName = "e-wb";
 
-    // try this. Don't think this works - has to be changed in the libs:
-    // definitely makes a difference to power consumption
-    RFduinoBLE.advertisementInterval = 1000; 
+    // advertisement interval makes a big difference to power consumption
+    RFduinoBLE.advertisementInterval = 2000; 
 
-    //initialise pins
+    // initialise pins
     pinMode(button, INPUT_PULLUP);
     pinMode(batt_level, OUTPUT);
 
@@ -49,7 +52,7 @@ void setup()
         pinMode(leds[i], OUTPUT);
     }
 
-    //check power consumption on this
+    // check power consumption on this
     digitalWrite(batt_level, LOW);
     RFduino_pinWake(button, LOW);
 
@@ -109,9 +112,32 @@ void loop()
         bar_graph(last_reading);
         delay(500);
         bar_graph(0);
+        restartBLE();
     }
+}
 
-    // send back battery and uptime - maybe not every 5 seconds?
+void restartBLE()
+{
+    // start the BLE stack
+    RFduinoBLE.end();
+    // start the BLE stack
+    RFduinoBLE.begin();
+}
+// try and debug disappearing radio
+void RFduinoBLE_onAdvertisement(bool start)
+{
+    digitalWrite(leds[0],HIGH);
+    delay(250);
+    digitalWrite(leds[0],LOW);
+    delay(250);
+}
+// when a radio connection is made
+void RFduinoBLE_onConnect()
+{
+    // send back battery and uptime
+    // would be good to know how send() works
+    // I think it puts the data in a buffer which can then be read if the
+    // client makes a connection & does a read
     msg.batt = readDAC();
     msg.uptime = millis() / 1000;
     memcpy(&txBuf, &msg, sizeof(msg));
@@ -121,8 +147,14 @@ void loop()
 // when we receive data
 void RFduinoBLE_onReceive(char *data, int len)
 {
-    if(len == 2)
+    if(len == 1) 
     {
+        // then just set the last_reading, so wristband can be silently updated
+        last_reading = data[0];
+    }
+    else if(len == 2)
+    {
+        // flash & vibe
         #ifdef SERIAL_DEBUG
         Serial.println(data[0], DEC);
         Serial.println(data[1], DEC);
@@ -130,7 +162,6 @@ void RFduinoBLE_onReceive(char *data, int len)
         last_reading = data[1];
         indicate(data[0], data[1]);
     }  
-    // if len == 1 then just set the last_reading, but don't flash?
 }
 
 // show the energy change with lights and motor pulses
