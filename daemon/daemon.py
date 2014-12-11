@@ -18,14 +18,13 @@ meter_timeout = 10
 
 # wrist band
 wristband_timeout = 6
-data_interval = 60 * 5  # seconds
+data_interval = 60 * 10  # seconds
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
 logging.basicConfig(level=logging.DEBUG,
                     format=log_format,
-                    filename='reader.log',
-                    filemode='w')
+                    filename='reader.log')
 
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
@@ -71,8 +70,8 @@ while True:
 
         # fetch data from wristband?
         if time.time() > last_data + data_interval:
-            (battery, uptime) = wb.get()
             last_data = time.time()
+            (battery, uptime) = wb.get()
             xively_t.add_datapoint('wb-battery', battery)
             xively_t.add_datapoint('wb-uptime', uptime)
 
