@@ -1,7 +1,10 @@
 # Todo
 
 - fetch battery life and uptime from wristband, post to xively
+- how to deal with unfresh data from wristband?
+- when starting, update wristband
 - only post once per minute for xively
+- only wait as long as necessary for gatttool - poll it?
 
 # Done
 
