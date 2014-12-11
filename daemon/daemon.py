@@ -50,6 +50,13 @@ while True:
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', power)
 
+        # post uptime to help debugging
+        f=open("/proc/uptime","r");
+        uptime_string=f.readline()
+        f.close()
+        uptime=uptime_string.split()[0]
+        xively_t.add_datapoint('uptime', uptime)
+
         # get difference in energy
         (last, this) = diff_realtime.diff(power, logging)
 
