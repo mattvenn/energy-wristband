@@ -56,3 +56,12 @@ I'm looking for:
 * Money/Hours for 3D design/casting,
 * Help with promotion/marketing/funding,
 * Help organising workshops with schools.
+
+## Current status
+
+[some photos](https://plus.google.com/photos/109869064118515349190/albums/6093503170218170657)
+
+* components chosen and ordered
+* working breadboarded prototype
+* PCBs designed, ordered and arrived
+* software working on raspberry pi communicates to wristband when energy changes
