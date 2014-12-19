@@ -39,6 +39,10 @@ logger.warning("daemon started")
 # main loop
 last_data = time.time()
 wb = wristband(logging, wristband_timeout)
+
+# set this flag to True to start with, so that the wristband gets updated
+failed_send = True
+
 while True:
     try:
         # read meter, might throw an exception
@@ -64,7 +68,14 @@ while True:
         if last is not None:
             logger.info("sending to wristband")
             # this blocks but times out
-            wb.send(last, this)
+            try:
+                wb.send(last, this)
+            except ValueError as e:
+                if e == 'timed out':
+                    failed_send = True
+                    logger.warning("failed to send %d %d, will try later" % (last,this))
+                else:
+                    raise(e)
             xively_t.add_datapoint('wb-this', this)
         else:
             logger.info("not enough difference")
@@ -75,6 +86,14 @@ while True:
             (battery, uptime) = wb.get()
             xively_t.add_datapoint('wb-battery', battery)
             xively_t.add_datapoint('wb-uptime', uptime)
+
+            # if the last update failed, try sending it silently
+            # (the wristband won't buzz)
+            if failed_send == True:
+                logger.warning("resending %d" % this)
+                # this might raise an exception
+                wb.re_send(this)
+                failed_send = False
 
         logger.info("start xively thread")
         xively_t.daemon = True

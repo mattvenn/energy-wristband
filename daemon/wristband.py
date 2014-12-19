@@ -20,6 +20,12 @@ class wristband():
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + wristband.ble_mac
 
+    def re_send(self, value):
+        self.logger.info("sending %d" % value)
+        send = hex(start)[2:].zfill(2)
+        cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
+        self.run_command(cmd)
+    
     def send(self, start, end):
         self.logger.info("sending %d %d" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
@@ -38,26 +44,23 @@ class wristband():
         cmd = self.base_cmd + " --char-read --handle=0x000e"
         data = self.run_command(cmd)
 
-        if data:
-            # expecting 4 bytes for each int sent
-            if len(data.split()) == 2 + 4 + 4:
+        # expecting 4 bytes for each int sent
+        if len(data.split()) == 2 + 4 + 4:
 
-                # unpack
-                batt_adc = self.unpack(data, 0)
-                uptime = self.unpack(data, 1)
+            # unpack
+            batt_adc = self.unpack(data, 0)
+            uptime = self.unpack(data, 1)
 
-                # convert batt
-                a_in = batt_adc * 1.2 / 1023
-                R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
-                R2 = 226000.0
-                batt_level = a_in / (R1 / (R1+R2))
+            # convert batt
+            a_in = batt_adc * 1.2 / 1023
+            R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
+            R2 = 226000.0
+            batt_level = a_in / (R1 / (R1+R2))
 
-                self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
-                return(batt_level, uptime)
-            else:
-                raise ValueError("problem parsing data: " + data)
+            self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
+            return(batt_level, uptime)
         else:
-            raise ValueError("got no data")
+            raise ValueError("problem parsing data: " + data)
 
     def run_command(self, cmd):
         proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
@@ -77,6 +80,7 @@ class wristband():
             # hung
             self.logger.warning("hung")
             proc.terminate()
+            raise ValueError("timed out")
         else:
             # an error?
             self.logger.warning("unexpected return code from gatttool: %d" % returncode)
@@ -87,7 +91,7 @@ if __name__ == '__main__':
     start = int(sys.argv[1])
     end = int(sys.argv[2])
     import logging
-    logging.warning("starting")
+    logging.basicConfig(level=logging.DEBUG)
     s = wristband(logging)
     s.send(start, end)
     (batt_level, uptime ) = s.get()
