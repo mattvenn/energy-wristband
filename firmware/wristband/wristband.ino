@@ -1,7 +1,4 @@
 #include <RFduinoBLE.h>
-/*
-http://www.eetimes.com/document.asp?doc_id=1278927
-*/
 
 // default serial RX & TX are on pins 0 & 1 
 int button = 0;
