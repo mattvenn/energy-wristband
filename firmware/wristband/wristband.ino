@@ -46,6 +46,11 @@ void setup()
     pinMode(motor, OUTPUT);
     digitalWrite(motor, LOW);
 
+    // analog reference
+    analogReference(VBG);
+    // no prescaling (defaults to 1/3?)
+    analogSelection(AIN_NO_PS);
+
     // leds
     for( int i = 0 ; i<num_leds; i ++)
     {
@@ -85,6 +90,7 @@ int readDAC()
   NRF_ADC->TASKS_START = 1;
 
   pinMode(batt_level, INPUT);
+
   delay(10);
 
   int batt = analogRead(batt_level); 
@@ -92,7 +98,7 @@ int readDAC()
   NRF_ADC->TASKS_STOP = 1;
 
   pinMode(batt_level, OUTPUT);
-  digitalWrite(batt_level, LOW);
+//  digitalWrite(batt_level, LOW); //with this in, seems slightly larger energy usage
 
   return batt;
 }
@@ -110,27 +116,12 @@ void loop()
     {
         RFduino_resetPinWake(button);
         bar_graph(last_reading);
-        delay(500);
+        delay(1000);
         bar_graph(0);
-        restartBLE();
     }
 }
 
-void restartBLE()
-{
-    // start the BLE stack
-    RFduinoBLE.end();
-    // start the BLE stack
-    RFduinoBLE.begin();
-}
-// try and debug disappearing radio
-void RFduinoBLE_onAdvertisement(bool start)
-{
-    digitalWrite(leds[0],HIGH);
-    delay(250);
-    digitalWrite(leds[0],LOW);
-    delay(250);
-}
+
 // when a radio connection is made
 void RFduinoBLE_onConnect()
 {
