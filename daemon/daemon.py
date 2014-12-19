@@ -36,13 +36,16 @@ logger = logging.getLogger('')
 logger.addHandler(console)
 logger.warning("daemon started")
 
-# main loop
-last_data = time.time()
+# wristband object
 wb = wristband(logging, wristband_timeout)
+
+# set this in the past so wristband is updated when daemon starts
+last_data = time.time() - data_interval
 
 # set this flag to True to start with, so that the wristband gets updated
 failed_send = True
 
+# main loop
 while True:
     try:
         # read meter, might throw an exception
