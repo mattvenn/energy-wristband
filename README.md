@@ -57,11 +57,12 @@ I'm looking for:
 * Help with promotion/marketing/funding,
 * Help organising workshops with schools.
 
-## Current status
+## Links
 
-[some photos](https://plus.google.com/photos/109869064118515349190/albums/6093503170218170657)
+* [some photos](https://plus.google.com/photos/109869064118515349190/albums/6093503170218170657) 
+* See the [project log](docs/project_log.md)
+* [Schematic and board design](https://github.com/mattvenn/eagle-circuit-designs/tree/master/energy-wristband)
+* [Firmware for wristband](./firmware/)
+* [Python daemon](./daemon/) for energy monitoring and wristband communication
 
-* components chosen and ordered
-* working breadboarded prototype
-* PCBs designed, ordered and arrived
-* software working on raspberry pi communicates to wristband when energy changes
+
