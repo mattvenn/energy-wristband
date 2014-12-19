@@ -90,7 +90,7 @@ while True:
             # if the last update failed, try sending it silently
             # (the wristband won't buzz)
             if failed_send == True:
-                logger.warning("resending %d" % this)
+                logger.info("resending %d" % this)
                 # this might raise an exception
                 wb.re_send(this)
                 failed_send = False
