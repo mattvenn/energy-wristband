@@ -22,13 +22,13 @@ data_interval = 60 * 10  # seconds
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
-logging.basicConfig(level=logging.WARNING,
+logging.basicConfig(level=logging.INFO,
                     format=log_format,
                     filename='reader.log')
 
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()
-console.setLevel(logging.WARNING)
+console.setLevel(logging.INFO)
 formatter = logging.Formatter(log_format)
 console.setFormatter(formatter)
 # add the handler to the root logger

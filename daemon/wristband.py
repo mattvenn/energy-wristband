@@ -48,7 +48,6 @@ class wristband():
 
                 # convert batt
                 a_in = batt_adc * 1.2 / 1023
-                self.logger.warning("batt raw = %d" % batt_adc)
                 R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
                 R2 = 226000.0
                 batt_level = a_in / (R1 / (R1+R2))
