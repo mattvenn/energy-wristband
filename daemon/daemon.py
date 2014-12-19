@@ -17,8 +17,15 @@ meter_port = "/dev/ttyUSB0"
 meter_timeout = 10
 
 # wrist band
-wristband_timeout = 6
 data_interval = 60 * 10  # seconds
+wristband_timeout = 10
+wb = wristband(logging, wristband_timeout)
+
+# set this in the past so wristband is updated when daemon starts
+last_data = time.time() - data_interval
+
+# set this flag to True to start with, so that the wristband gets updated
+failed_send = True
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
@@ -36,13 +43,8 @@ logger = logging.getLogger('')
 logger.addHandler(console)
 logger.warning("daemon started")
 
+
 # main loop
-last_data = time.time()
-wb = wristband(logging, wristband_timeout)
-
-# set this flag to True to start with, so that the wristband gets updated
-failed_send = True
-
 while True:
     try:
         # read meter, might throw an exception
