@@ -14,7 +14,7 @@ class wristband():
     ble_host = 'hci0'
     gatt = "./gatttool"
 
-    def __init__(self, logging, timeout=6):
+    def __init__(self, logging, timeout=10):
         self.timeout = timeout
         self.logger = logging.getLogger('bluetooth')
         self.base_cmd = wristband.gatt + " -t random -i " + \
