@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 
 import sys
 import threading
@@ -10,6 +10,7 @@ class wristband():
 
     ble_mac = "E4:E2:39:0A:C5:A9"
     ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
+    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
     ble_host = 'hci0'
     gatt = "./gatttool"
 
@@ -46,8 +47,11 @@ class wristband():
                 uptime = self.unpack(data, 1)
 
                 # convert batt
-                vcc = 3.3  # should be 3.3
-                batt_level = batt_adc / 1023.0 * vcc * 2
+                a_in = batt_adc * 1.2 / 1023
+                self.logger.warning("batt raw = %d" % batt_adc)
+                R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
+                R2 = 226000.0
+                batt_level = a_in / (R1 / (R1+R2))
 
                 self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
                 return(batt_level, uptime)
@@ -87,4 +91,5 @@ if __name__ == '__main__':
     logging.warning("starting")
     s = wristband(logging)
     s.send(start, end)
-    s.get()
+    (batt_level, uptime ) = s.get()
+    logging.warning("got %fv %ds" % (batt_level, uptime))
