@@ -20,8 +20,8 @@ class wristband():
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + wristband.ble_mac
 
-    def re_send(self, value):
-        self.logger.info("sending %d" % value)
+    def re_send(self, start):
+        self.logger.info("sending %d" % start)
         send = hex(start)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
