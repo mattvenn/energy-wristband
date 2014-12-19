@@ -71,7 +71,7 @@ while True:
             try:
                 wb.send(last, this)
             except ValueError as e:
-                if e == 'timed out':
+                if e.message == 'timed out':
                     failed_send = True
                     logger.warning("failed to send %d %d, will try later" % (last,this))
                 else:
