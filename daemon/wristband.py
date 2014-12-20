@@ -56,6 +56,7 @@ class wristband():
             R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
             R2 = 226000.0
             batt_level = a_in / (R1 / (R1+R2))
+            batt_level = round(batt_level, 2)
 
             self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
             return(batt_level, uptime)
