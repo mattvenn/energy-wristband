@@ -8,11 +8,16 @@ const int num_leds = 4;
 int leds[num_leds] = {2, 3, 4, 5};
 int motor = 6;
 
-// timings
-int motor_on = 50;
-int motor_off = 300;
+// UI constants
+const int bar_delay = 400;  // time between changing leds on the bargraph
+const int min_motor = 40;   // min motor pwm
+const int max_motor = 200;  // max motor pwm
+// how long before last update becomes 'old', needs to be more than the update
+// of the daemon process - which is 10mins for now
+const double comm_timeout = 1000 * 60 * 15; // 15 minutes
 
 int last_reading = 0;
+double last_comms = 0;
 
 // struct to send messages back
 typedef struct Msg
@@ -75,7 +80,7 @@ void setup()
     }
 
     // initialise watchdog
-    NRF_WDT->CRV = 10 * 32768; // Timeout period of 10 s
+    NRF_WDT->CRV = 20 * 32768; // Timeout period of 10 s
     NRF_WDT->TASKS_START = 1; // Watchdog start
 }
 
@@ -111,10 +116,23 @@ void loop()
     // if button pressed, show last reading
     if(RFduino_pinWoke(button))
     {
+        if(millis() > last_comms + comm_timeout)
+        {
+            for(int i=0; i<3; i++)
+            {
+                bar_graph(last_reading);
+                delay(250);
+                bar_graph(0);
+                delay(250);
+            }
+        }
+        else
+        {
+            bar_graph(last_reading);
+            delay(1000);
+            bar_graph(0);
+        }
         RFduino_resetPinWake(button);
-        bar_graph(last_reading);
-        delay(1000);
-        bar_graph(0);
     }
 }
 
@@ -135,6 +153,7 @@ void RFduinoBLE_onConnect()
 // when we receive data
 void RFduinoBLE_onReceive(char *data, int len)
 {
+    last_comms = millis();
     if(len == 1) 
     {
         // then just set the last_reading, so wristband can be silently updated
@@ -155,20 +174,27 @@ void RFduinoBLE_onReceive(char *data, int len)
 // show the energy change with lights and motor pulses
 void indicate(int start, int end)
 {
-    if( start < end )
+    // vibe to start with
+    vibe(start,end);
+
+    // repeat the light show 3 times
+    for(int i=0; i<3; i++)
     {
-        for(int i = start; i <= end; i ++)
+        if( start < end )
         {
-            bar_graph(i);
-            vibe();
+            for(int i = start; i <= end; i ++)
+            {
+                bar_graph(i);
+                delay(bar_delay);
+            }
         }
-    }
-    else
-    {
-        for(int i = start; i >= end; i --)
+        else
         {
-            bar_graph(i);
-            vibe();
+            for(int i = start; i >= end; i --)
+            {
+                bar_graph(i);
+                delay(bar_delay);
+            }
         }
     }
 
@@ -176,22 +202,40 @@ void indicate(int start, int end)
     bar_graph(0);
 }
 
-// can we do this with PWM?
-void vibe()
+void vibe(int start, int end)
 {
-    digitalWrite(motor, HIGH);
-    delay(motor_on);
-    digitalWrite(motor, LOW);
-    delay(motor_off);
+
+    int start_m = map(start,1,4,min_motor,max_motor);
+    int end_m = map(end,1,4,min_motor,max_motor);
+    int step = 1;
+    int d = 10;
+
+    if(end>start)
+    {
+        for(int i=start_m; i<end_m; i+=step)
+        {
+            analogWrite(motor,i);
+            delay(d);
+        }
+    }
+    else
+    {
+        for(int i=start_m; i>end_m; i-=step)
+        {
+            analogWrite(motor,i);
+            delay(d);
+        }
+    }
+    analogWrite(motor,0);
 }
 
 void bar_graph(int level)
 {
-  // all off
-  for(int i=0; i < num_leds; i ++)
+    // all off
+    for(int i=0; i < num_leds; i ++)
         digitalWrite(leds[i], LOW); 
 
-  // turn on what we need
-  for(int i=0; i < level; i ++)
-    digitalWrite(leds[i], HIGH); 
+    // turn on what we need
+    for(int i=0; i < level; i ++)
+        digitalWrite(leds[i], HIGH); 
 }
