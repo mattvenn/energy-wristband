@@ -1,3 +1,13 @@
+# Usage notes
+
+* Not too big
+* Button is too small to press easily
+* UI additions:
+    * vibrate change speed up or down to indicate increase or decrease in energy
+    * show lights as animation for longer or repeat a few times
+    * show low battery as a flashing red led
+* Worth thinking about BLE range extension or just give up on BLE?
+
 # PCB assembly notes
 
 Very exciting to have a working wristband on! Assembled today and reflowed a
@@ -67,10 +77,6 @@ dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 r
 
 Slow usb bus speed broke audio playing. Set it back to how it was before and swapped the pihub hub for a pluggable one.
 
-# components chosen and ordered
-
-See the [google drive doc](https://docs.google.com/spreadsheets/d/1oj70GuA22dZxQOM_nt-e6gl6c6SbQOTN_fw_uVvux9A/edit?usp=sharing) for component choice and calculations.
-
 # PCBs designed
 
 Ordered from OSHpark. Paid extra for fast delivery.
@@ -79,6 +85,21 @@ Ordered from OSHpark. Paid extra for fast delivery.
 * back from fab 8/12
 * sent 9/12
 * delivered 16/12
+
+# components for PCB chosen and ordered
+
+See the [google drive doc](https://docs.google.com/spreadsheets/d/1oj70GuA22dZxQOM_nt-e6gl6c6SbQOTN_fw_uVvux9A/edit?usp=sharing) for component choice and calculations.
+
+The main extra components used are:
+
+* Used the MCP73831T LiPo charger - the same one that was in the sparkfun
+ charger I'm using to test. Requires only 3 external components.
+* Using the TPS78228DDCT LDO regulator to 2.8v. I thought I might go switched
+ mode for efficiency, but actually as the circuit is mostly sleeping and using
+ 4uA, an LDO is more efficient - but only if it has a low quiescent current.
+ This model is just 1uA!
+* 110mAH LiPo - calculated to give months of usage - wait to see the reality!
+ Hopefully we can downsize this in the future.
 
 # Software 
 
@@ -91,5 +112,7 @@ Energy usage is from a current cost meter.
 
 # working breadboarded prototype
 
-with RFduino, LEDs and motor
+with RFduino, LEDs and motor.
+
+RFduino draws 4uA in deep sleep.
 
