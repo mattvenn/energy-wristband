@@ -44,7 +44,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4604493"
-     inkscape:cx="369.90227"
+     inkscape:cx="397.2911"
      inkscape:cy="325.06996"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -58,7 +58,9 @@
      fit-margin-top="10"
      fit-margin-bottom="10"
      fit-margin-left="10"
-     fit-margin-right="10">
+     fit-margin-right="10"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid4126"
@@ -77,7 +79,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2431,6 +2433,9 @@ YNSxIG65oC1iu4BRscCnRx7Y/vZNWvLRW4HUVEWwDgDiiyC5CA+4Aip1+Vfl5NRSO2BzTA7Z60gJ
 h5kjBQOprSESJCA5wo6mmaTEsku5uTiku+WKk8elWu5L1Gm5tQSNpoqkYxnvRRcrlR//2Q==
 "
        height="356.20615"
-       width="391.82675" />
+       width="391.82675"
+       inkscape:export-filename="/home/mattvenn/work/python/energy-wristband/docs/system-overview.png"
+       inkscape:export-xdpi="150"
+       inkscape:export-ydpi="150" />
   </g>
 </svg>
