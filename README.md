@@ -2,30 +2,13 @@
 
 Learning about home electrical energy usage with wearable electronics.
 
-## Context
-
-Home electricy usage needs to be reduced, and often there is room for easy
-savings. I tried to inspire people with the numbers behind energy use with
-[cursive data](http://cursivedata.co.uk) - a project that brings the numbers to
-life using wall-hanging drawing robots.
-
-Over the course of the cursive data project I discovered:
-
-* Energy usage information in the home is repetitive (boring).
-* A wall hanging drawing robot needs a lot of love and attention to work well.
-
-A nice looking picture that's drawn in an interesting way could well inspire
-someone to change their energy habits. But the method was too complex and
-expensive for the results. The only real applications found for the project were
-in public places.
-
 ## Introducing... the Energy Wristband
 
-A wristband that tells you energy changes in your home. It connects to a base
-station like a ['current cost' or
-similar](https://www.google.co.uk/search?q=energy+monitor&biw=1309&bih=739&source=lnms&tbm=isch&sa=X&ei=jlRiVP20K7eTsQT1sYCoBA&ved=0CAcQ_AUoAg). When a change in energy usage occurs,
-the wristband vibrates and a small LED bargraph shows your current usage from 1
-to 4. 
+A wristband that tells you energy changes in your home. It connects via a
+Raspberry Pi computer to a base station like a ['current cost' or
+similar](https://www.google.co.uk/search?q=energy+monitor&biw=1309&bih=739&source=lnms&tbm=isch&sa=X&ei=jlRiVP20K7eTsQT1sYCoBA&ved=0CAcQ_AUoAg).
+When a change in energy usage occurs, the wristband vibrates and a small LED
+bargraph shows your current usage from 1 to 4.
 
 Realtime energy use can be queried by pressing the button.
 
@@ -51,6 +34,7 @@ power](http://en.wikipedia.org/wiki/Pester_power)!
 
 I'm looking for:
 
+* A group of people interested in supporting and helping to test the idea.
 * Sponsorship in terms of kit (like radios, batteries, energy measurement base stations),
 * Money/Hours for electronics/software development time,
 * Money/Hours for 3D design/casting,
@@ -60,9 +44,25 @@ I'm looking for:
 ## Links
 
 * [some photos](https://plus.google.com/photos/109869064118515349190/albums/6093503170218170657) 
-* See the [project log](docs/project_log.md)
+* [project log](docs/project_log.md)
 * [Schematic and board design](https://github.com/mattvenn/eagle-circuit-designs/tree/master/energy-wristband)
 * [Firmware for wristband](./firmware/)
 * [Python daemon](./daemon/) for energy monitoring and wristband communication
 
+## Context
+
+Home electricy usage needs to be reduced, and often there is room for easy
+savings. I tried to inspire people with the numbers behind energy use with
+[cursive data](http://cursivedata.co.uk) - a project that brings the numbers to
+life using wall-hanging drawing robots.
+
+Over the course of the cursive data project I discovered:
+
+* Energy usage information in the home is repetitive (boring).
+* A wall hanging drawing robot needs a lot of love and attention to work well.
+
+A nice looking picture that's drawn in an interesting way could well inspire
+someone to change their energy habits. But the method was too complex and
+expensive for the results. The only real applications found for the project were
+in public places.
 
