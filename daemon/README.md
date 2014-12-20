@@ -1,10 +1,11 @@
 # Todo
 
-- only post once per minute for xively
-- update wb with current energy at beginning or if it reboots
+- catch ctrl-C
 
 # Done
 
++ update wb with current energy at beginning or if it reboots
+- only post once per minute for xively - decided to leave as is
 + fetch battery life and uptime from wristband, post to xively
 	+ if fails, wait for a bit before trying again
 + need to maintain a small queue of bluetooth and xively threads, joining later?
