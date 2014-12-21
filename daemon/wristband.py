@@ -7,8 +7,8 @@ from easyprocess import Proc
 class wristband():
 
     ble_mac = "E4:E2:39:0A:C5:A9"
-#    ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
-#    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
+    ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
+    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
     ble_host = 'hci0'
     gatt = "./gatttool"
 
