@@ -25,7 +25,7 @@ class wristband():
         send = hex(start)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
-    
+
     def send(self, start, end):
         self.logger.info("sending %d %d" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
@@ -53,12 +53,13 @@ class wristband():
 
             # convert batt
             a_in = batt_adc * 1.2 / 1023
-            R1 = 76000.0 # should be 100k but adjusted for RAIN impedance
+            R1 = 76000.0  # should be 100k but adjusted for RAIN impedance
             R2 = 226000.0
             batt_level = a_in / (R1 / (R1+R2))
             batt_level = round(batt_level, 2)
 
-            self.logger.info("batt = %.2fv uptime = %ds" % (batt_level, uptime))
+            self.logger.info("raw = %d batt = %.2fv uptime = %ds" %
+                            (badd_adc, batt_level, uptime))
             return(batt_level, uptime)
         else:
             raise ValueError("problem parsing data: " + data)
@@ -95,5 +96,5 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     s = wristband(logging)
     s.send(start, end)
-    #(batt_level, uptime ) = s.get()
-    #logging.warning("got %fv %ds" % (batt_level, uptime))
+    # (batt_level, uptime ) = s.get()
+    # logging.warning("got %fv %ds" % (batt_level, uptime))
