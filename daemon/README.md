@@ -1,9 +1,9 @@
 # Todo
 
-- catch ctrl-C
 
 # Done
 
++ catch ctrl-C
 + update wb with current energy at beginning or if it reboots
 - only post once per minute for xively - decided to leave as is
 + fetch battery life and uptime from wristband, post to xively
