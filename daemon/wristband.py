@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 
 import sys
-import threading
-import subprocess
-import time
+from easyprocess import Proc
 
 
 class wristband():
 
     ble_mac = "E4:E2:39:0A:C5:A9"
-    ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
-    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
+#    ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
+#    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
     ble_host = 'hci0'
     gatt = "./gatttool"
 
@@ -59,33 +57,28 @@ class wristband():
             batt_level = round(batt_level, 2)
 
             self.logger.info("raw = %d batt = %.2fv uptime = %ds" %
-                            (badd_adc, batt_level, uptime))
+                            (batt_adc, batt_level, uptime))
             return(batt_level, uptime)
         else:
             raise ValueError("problem parsing data: " + data)
 
     def run_command(self, cmd):
-        proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         self.logger.info("waiting %d seconds for process" % self.timeout)
         self.logger.debug(cmd)
 
-        # wait
-        time.sleep(self.timeout)
+        # run with easyprocess
+        proc=Proc(cmd).call(timeout=self.timeout)
 
-        # see if command is still running
-        returncode = proc.poll()
-        if returncode == 0:
+        if proc.return_code == 0:
             self.logger.info("success")
-            data = proc.stdout.readline()
-            return data
-        elif returncode is None:
-            # hung
-            self.logger.warning("hung")
-            proc.terminate()
+            return proc.stdout
+        elif proc.return_code == -15:
+            # timed out
             raise ValueError("gatttool timed out")
         else:
             # an error?
-            raise ValueError("unexpected return code from gatttool: %d" % returncode)
+            raise ValueError("unexpected return code from gatttool: %d" % proc.return_code)
+
 
 
 if __name__ == '__main__':
@@ -93,8 +86,8 @@ if __name__ == '__main__':
     start = int(sys.argv[1])
     end = int(sys.argv[2])
     import logging
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     s = wristband(logging)
     s.send(start, end)
-    # (batt_level, uptime ) = s.get()
-    # logging.warning("got %fv %ds" % (batt_level, uptime))
+    (batt_level, uptime ) = s.get()
+    logging.info("got %fv %ds" % (batt_level, uptime))
