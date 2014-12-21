@@ -81,10 +81,10 @@ class wristband():
             # hung
             self.logger.warning("hung")
             proc.terminate()
-            raise ValueError("timed out")
+            raise ValueError("gatttool timed out")
         else:
             # an error?
-            self.logger.warning("unexpected return code from gatttool: %d" % returncode)
+            raise ValueError("unexpected return code from gatttool: %d" % returncode)
 
 
 if __name__ == '__main__':
@@ -95,5 +95,5 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     s = wristband(logging)
     s.send(start, end)
-    (batt_level, uptime ) = s.get()
-    logging.warning("got %fv %ds" % (batt_level, uptime))
+    #(batt_level, uptime ) = s.get()
+    #logging.warning("got %fv %ds" % (batt_level, uptime))
