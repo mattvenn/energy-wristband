@@ -5,7 +5,7 @@ import logging
 
 from meter import read_meter, Meter_Exception
 from wristband import wristband, WB_Exception
-import diff_realtime
+import diff
 from xively import xively
 
 # for xively
@@ -20,6 +20,9 @@ meter_timeout = 10
 data_interval = 60 * 10  # seconds
 wristband_timeout = 10
 wb = wristband(logging, wristband_timeout)
+
+# get diff object
+diff = diff_energy(logging)    
 
 # set this in the past so wristband is updated when daemon starts
 last_data = time.time() - data_interval
@@ -47,26 +50,29 @@ while True:
         # read meter, might raise an exception
         (temp, energy) = read_meter(meter_port, logger, meter_timeout)
         logger.info("meter returned %dW %.1fC" % (energy, temp))
-        # energy as a division (see diff_realtime)
-        energy_div = diff_realtime.energy_to_div(energy)
 
         # update internet service - run as a daemon thread
         xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
+        xively_t.daemon = True  # could this be done in the class?
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', energy)
 
-
         # get difference in energy
-        last_energy_div = diff_realtime.diff(energy_div, logging)
+        last_energy = diff.diff(energy)
 
-        # send/receive to the wristband?
+        # convert the real energies to divisions from 1 to 4
+        energy_div = diff.energy_to_div(energy)
+        last_energy_div = diff.energy_to_div(last_energy)
+
+        # send/receive to the wristband? can raise exceptions
         try:
-            if energy_div != last_energy_div:
-                # this blocks but times out, can raise exceptions
+            # need to send?
+            if energy != last_energy:
                 xively_t.add_datapoint('wb-this', energy_div)
+                # this blocks but times out
                 wb.send(last_energy_div, energy_div)
 
-            # time to fetch data from wristband?
+            # need to fetch data from wristband?
             if time.time() > last_data + data_interval:
                 last_data = time.time()
                 (battery, uptime) = wb.get()
@@ -81,7 +87,6 @@ while True:
             logger.warning(e)
 
         logger.info("send data to xively")
-        xively_t.daemon = True
         xively_t.start()
 
         # keep a track of running threads
