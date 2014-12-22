@@ -22,7 +22,7 @@ wristband_timeout = 10
 wb = wristband(logging, wristband_timeout)
 
 # get diff object
-diff = diff_energy(logging)    
+diff = diff.diff_energy(logging)    
 
 # set this in the past so wristband is updated when daemon starts
 last_data = time.time() - data_interval
