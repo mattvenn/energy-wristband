@@ -34,8 +34,8 @@ class diff_energy():
     def wipe_hist(self):
         self.hist = []
 
-    def add_hist(self,energy,now):
-        self.hist.append({"t": now, "e": energy})
+    def add_hist(self,energy):
+        self.hist.append({"t": time.time(), "e": energy})
     
     def get_hist(self):
         now = time.time()
@@ -64,9 +64,9 @@ class diff_energy():
 
     # returns the last recorded energy, as long as it wasn't too long ago
     # in which case, return the current energy
-    def diff(self, energy, now=time.time()):
+    def diff(self, energy):
         # add new energy to our history
-        self.add_hist(energy,now)
+        self.add_hist(energy)
 
         # get history point
         try:
