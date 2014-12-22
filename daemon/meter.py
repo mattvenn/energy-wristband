@@ -41,4 +41,4 @@ def read_meter(meter_port, logger, timeout=10):
     if m is None:
         raise ValueError("couldn't parse msg [%s]" % msg)
 
-    return float(m.group(1)), float(m.group(2))
+    return round(float(m.group(1)),2), round(float(m.group(2)),2)
