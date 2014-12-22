@@ -26,7 +26,7 @@ last_data = time.time() - data_interval
 
 # set up logging to file - see previous section for more details
 log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format=log_format,
                     filename='reader.log')
 
