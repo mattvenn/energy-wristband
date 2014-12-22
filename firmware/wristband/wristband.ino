@@ -10,6 +10,7 @@ int motor = 6;
 
 // UI constants
 const int bar_delay = 400;  // time between changing leds on the bargraph
+const int bar_end_delay = 400; // time between showing multiple bar graphs
 const int min_motor = 40;   // min motor pwm
 const int max_motor = 200;  // max motor pwm
 // how long before last update becomes 'old', needs to be more than the update
@@ -196,6 +197,7 @@ void indicate(int start, int end)
                 delay(bar_delay);
             }
         }
+        delay(bar_end_delay);
     }
 
     // lights off
