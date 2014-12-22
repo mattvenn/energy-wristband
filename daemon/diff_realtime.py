@@ -12,7 +12,6 @@ num_divs = 4  # relate the change as a number from 1 to num_divs
 max_energy = 3000  # watts - this should be adaptive
 energy_per_div = max_energy / num_divs
 
-
 # limits between 1 and num_divs
 def energy_to_div(energy):
     # convert to div
@@ -27,6 +26,7 @@ def energy_to_div(energy):
     return div
 
 # returns the last recorded energy, as long as it wasn't too long ago
+# in which case, return the current energy
 def diff(energy, logging):
     dt = datetime.datetime.now()
 
@@ -35,7 +35,8 @@ def diff(energy, logging):
             last = pickle.load(fh)
     except:
         save_state(dt, energy)
-        raise ValueError("no history")
+        logging.debug("no history")
+        return energy
 
     # save current energy and time
     save_state(dt, energy)
@@ -43,7 +44,8 @@ def diff(energy, logging):
     # if it's been too long between samples, start again
     diff_time = (dt - last['time']).total_seconds()
     if diff_time > max_time:
-        raise ValueError("time too long to differentiate")
+        logging.debug("time too long to differentiate")
+        return energy
 
     return last['energy']
 

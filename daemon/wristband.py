@@ -3,6 +3,10 @@
 import sys
 from easyprocess import Proc
 
+class WB_Exception(Exception):
+    def __init__(self, message):
+        super(WB_Exception, self).__init__(message)
+        self.message = message
 
 class wristband():
 

@@ -3,9 +3,9 @@ import threading
 import time
 import logging
 
-from meter import read_meter
-from wristband import wristband
-import diff_realtime
+from meter import read_meter, Meter_Exception
+from wristband import wristband, WB_Exception
+from diff_realtime import Diff_Exception, energy_to_div, diff
 from xively import xively
 
 # for xively
@@ -44,39 +44,32 @@ logger.warning("daemon started")
 # main loop
 while True:
     try:
+        # read meter, might raise an exception
+        (temp, energy) = read_meter(meter_port, logger, meter_timeout)
+        logger.info("meter returned %dW %.1fC" % (energy, temp))
+        energy_div = diff_realtime.energy_to_div(energy)
+
+        # update internet service - run as a daemon thread
+        xively_t = xively(feed_id, logging, timeout=xively_timeout)
+        xively_t.add_datapoint('temperature', temp)
+        xively_t.add_datapoint('energy', energy)
+
+        # post uptime to help debugging
+        f=open("/proc/uptime","r");
+        uptime_string=f.readline()
+        f.close()
+        uptime=uptime_string.split()[0]
+        xively_t.add_datapoint('uptime', uptime)
+
+        # get difference in energy
+        last_energy_div = diff_realtime.diff(energy_div, logging)
+
+        # send/receive to the wristband?
         try:
-            # read meter, might throw an exception
-            (temp, energy) = read_meter(meter_port, logger, meter_timeout)
-        except ValueError as e:
-            logger.info(e)
-            # prevent rapid looping
-            time.sleep(1)
-        else:
-            logger.info("meter returned %dW %.1fC" % (energy, temp))
-            energy_div = diff_realtime.energy_to_div(energy)
-
-            # update internet service - run as a daemon thread
-            xively_t = xively(feed_id, logging, timeout=xively_timeout)
-            xively_t.add_datapoint('temperature', temp)
-            xively_t.add_datapoint('energy', energy)
-
-            # post uptime to help debugging
-            f=open("/proc/uptime","r");
-            uptime_string=f.readline()
-            f.close()
-            uptime=uptime_string.split()[0]
-            xively_t.add_datapoint('uptime', uptime)
-
-            # get difference in energy
-            try:
-                last_energy_div = diff_realtime.diff(energy_div, logging)
-                # send to the wristband?
-                if energy_div != last_energy_div:
-                    # this blocks but times out
-                    wb.send(last_energy_div, energy_div)
-                    xively_t.add_datapoint('wb-this', energy_div)
-            except ValueError as e:
-                logger.debug(e)
+            if energy_div != last_energy_div:
+                # this blocks but times out, can raise exceptions
+                xively_t.add_datapoint('wb-this', energy_div)
+                wb.send(last_energy_div, energy_div)
 
             # time to fetch data from wristband?
             if time.time() > last_data + data_interval:
@@ -89,15 +82,20 @@ while True:
                 logger.info("resending last energy %d" % energy_div)
                 wb.re_send(energy_div)
 
-            logger.info("send data to xively")
-            xively_t.daemon = True
-            xively_t.start()
+        except WB_Exception as e:
+            logger.warning(e)
+
+        logger.info("send data to xively")
+        xively_t.daemon = True
+        xively_t.start()
 
         # keep a track of running threads
         logger.debug("%d threads running", len(threading.enumerate()))
 
+    except Meter_Exception as e:
+        logger.info(e)
+        # prevent rapid looping
+        time.sleep(1)
     except KeyboardInterrupt as e:
         logger.warning("caught interrupt - quitting")
         break
-
-

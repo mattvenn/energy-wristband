@@ -9,6 +9,11 @@ see current cost XML format doc here:
 http://www.currentcost.com/cc128/xml.htm
 """
 
+class Meter_Exception(Exception):
+    def __init__(self, message):
+        super(Meter_Exception, self).__init__(message)
+        self.message = message
+
 def read_meter(meter_port, logger, timeout=10):
     if not serial_debug:
         serial_port = serial.Serial()
