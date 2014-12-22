@@ -8,7 +8,7 @@ class xively(threading.Thread):
     url_base = "http://api.pachube.com/v2/feeds/"
     version = '1.0.0'
 
-    def __init__(self, feed_id, logging, keyfile="api.key", timeout=5):
+    def __init__(self, feed_id, logging, keyfile="api.key", timeout=5, uptime=False):
         threading.Thread.__init__(self)
 
         # private key stored in a file
@@ -23,6 +23,16 @@ class xively(threading.Thread):
         self.opener.addheaders = [('X-ApiKey', api_key)]
         self.data = []
         self.payload = {}
+
+        if uptime:
+            self.add_uptime()
+
+    def add_uptime(self):
+        f=open("/proc/uptime","r");
+        uptime_string=f.readline()
+        f.close()
+        uptime=uptime_string.split()[0]
+        self.add_datapoint('uptime', uptime)
 
     def add_datapoint(self, dp_id, dp_value):
         self.data.append({'id': dp_id, 'current_value': dp_value})
