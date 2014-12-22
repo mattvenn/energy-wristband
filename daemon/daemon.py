@@ -52,7 +52,7 @@ while True:
             # prevent rapid looping
             time.sleep(1)
         else:
-            logger.info("meter returned %fW %fC" % (energy, temp))
+            logger.info("meter returned %dW %.1fC" % (energy, temp))
             energy_div = diff_realtime.energy_to_div(energy)
 
             # update internet service - run as a daemon thread
