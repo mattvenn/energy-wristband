@@ -43,6 +43,7 @@ class diff_energy():
         #print self.hist
 
         # trim old history points
+        self.logging.debug(self.hist)
         self.hist = [p for p in self.hist 
                         if p['t'] + diff_energy.max_time > now]
 
@@ -51,6 +52,7 @@ class diff_energy():
         valid = [p for p in self.hist
                     if p['t'] + diff_energy.min_time < now]
 
+        self.logging.debug(valid)
         if len(valid) == 0:
             raise ValueError("not enough history")
     
