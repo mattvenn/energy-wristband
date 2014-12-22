@@ -64,7 +64,7 @@ class wristband():
                             (batt_adc, batt_level, uptime))
             return(batt_level, uptime)
         else:
-            raise ValueError("problem parsing data: " + data)
+            raise WB_Exception("problem parsing data: " + data)
 
     def run_command(self, cmd):
         self.logger.info("waiting %d seconds for process" % self.timeout)
@@ -78,10 +78,10 @@ class wristband():
             return proc.stdout
         elif proc.return_code == -15:
             # timed out
-            raise ValueError("gatttool timed out")
+            raise WB_Exception("gatttool timed out")
         else:
             # an error?
-            raise ValueError("unexpected return code from gatttool: %d" % proc.return_code)
+            raise WB_Exception("unexpected return code from gatttool: %d" % proc.return_code)
 
 
 

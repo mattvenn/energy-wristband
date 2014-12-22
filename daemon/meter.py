@@ -34,16 +34,16 @@ def read_meter(meter_port, logger, timeout=10):
         msg = 'msg =<msg><src>CC128-v0.11</src><dsb>01424</dsb><time>09:04:10</time><hist><dsw>01425</dsw><type>1</type><units>kwhr</units><data><sensor>0</sensor><h594>0.179</h594><h592>0.319</h592><h590>0.383</h590><h588>0.220</h588></data><data><sensor>1</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>2</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>3</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>4</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>5</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>6</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>7</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>8</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data><data><sensor>9</sensor><h594>0.000</h594><h592>0.000</h592><h590>0.000</h590><h588>0.000</h588></data></hist></msg>'
 
     if not msg:
-        raise ValueError("meter read timed out")
+        raise Meter_Exception("meter read timed out")
 
     # could be a history message (on every odd hour)
     m = re.search("</?hist>", msg)
     if m is not None:
-        raise ValueError("ignoring history message")
+        raise Meter_Exception("ignoring history message")
 
     # otherwise we get a message with temp and power usage
     m = re.search("<tmpr>(\d+\.\d+)</tmpr>.*<watts>(\d+)</watts>", msg)
     if m is None:
-        raise ValueError("couldn't parse msg [%s]" % msg)
+        raise Meter_Exception("couldn't parse msg [%s]" % msg)
 
     return round(float(m.group(1)),2), round(float(m.group(2)),2)
