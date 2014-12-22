@@ -87,7 +87,7 @@ while True:
 
                 # resend the last energy value in case a previous send failed
                 logger.info("resending last energy %d" % energy_div)
-                wb.re_send(this)
+                wb.re_send(energy_div)
 
             logger.info("start xively thread")
             xively_t.daemon = True
