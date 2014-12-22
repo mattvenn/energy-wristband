@@ -47,19 +47,14 @@ while True:
         # read meter, might raise an exception
         (temp, energy) = read_meter(meter_port, logger, meter_timeout)
         logger.info("meter returned %dW %.1fC" % (energy, temp))
+        # energy as a division (see diff_realtime)
         energy_div = diff_realtime.energy_to_div(energy)
 
         # update internet service - run as a daemon thread
-        xively_t = xively(feed_id, logging, timeout=xively_timeout)
+        xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
         xively_t.add_datapoint('temperature', temp)
         xively_t.add_datapoint('energy', energy)
 
-        # post uptime to help debugging
-        f=open("/proc/uptime","r");
-        uptime_string=f.readline()
-        f.close()
-        uptime=uptime_string.split()[0]
-        xively_t.add_datapoint('uptime', uptime)
 
         # get difference in energy
         last_energy_div = diff_realtime.diff(energy_div, logging)
