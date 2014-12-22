@@ -5,7 +5,7 @@ import logging
 
 from meter import read_meter, Meter_Exception
 from wristband import wristband, WB_Exception
-from diff_realtime import Diff_Exception, energy_to_div, diff
+from diff_realtime import energy_to_div, diff
 from xively import xively
 
 # for xively
@@ -47,7 +47,7 @@ while True:
         # read meter, might raise an exception
         (temp, energy) = read_meter(meter_port, logger, meter_timeout)
         logger.info("meter returned %dW %.1fC" % (energy, temp))
-        energy_div = diff_realtime.energy_to_div(energy)
+        energy_div = energy_to_div(energy)
 
         # update internet service - run as a daemon thread
         xively_t = xively(feed_id, logging, timeout=xively_timeout)
