@@ -43,7 +43,7 @@ class diff_energy():
         #print self.hist
 
         # trim old history points
-        self.logging.debug(self.hist)
+        #self.logging.debug(self.hist)
         self.hist = [p for p in self.hist 
                         if p['t'] + diff_energy.max_time > now]
 
@@ -52,7 +52,7 @@ class diff_energy():
         valid = [p for p in self.hist
                     if p['t'] + diff_energy.min_time < now]
 
-        self.logging.debug(valid)
+        #self.logging.debug(valid)
         if len(valid) == 0:
             raise ValueError("not enough history")
     
@@ -82,7 +82,7 @@ class diff_energy():
         diff = abs(diff)
 
         # if not enough
-        self.logging.debug("diff = %f" % diff)
+        self.logging.info("energy diff = %f" % diff)
         if diff < diff_energy.sensitivity: 
             return energy
 
