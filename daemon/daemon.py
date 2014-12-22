@@ -87,14 +87,14 @@ while True:
         xively_t.daemon = True
         xively_t.start()
 
-        # keep a track of running threads
-        logger.info("%d threads running", len(threading.enumerate()))
-        # in case something goes wrong - prevent rapid looping
-        time.sleep(1)
-
     except ValueError as e:
         logger.error(e)
     except KeyboardInterrupt as e:
         logger.warning("caught interrupt - quitting")
         break
+
+    # keep a track of running threads
+    logger.info("%d threads running", len(threading.enumerate()))
+    # in case something goes wrong - prevent rapid looping
+    time.sleep(1)
 
