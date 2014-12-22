@@ -1,9 +1,11 @@
 # Todo
 
-* poll gatttool, don't wait the full 10 seconds
 
 # Done
 
+* work out if power or energy is correct term and use that only - it's ENERGY!
+ in WATTS!
+* poll gatttool, don't wait the full 10 seconds
 * catch ctrl-C
 * update wb with current energy at beginning or if it reboots
 * only post once per minute for xively - decided to leave as is

@@ -44,57 +44,60 @@ logger.warning("daemon started")
 # main loop
 while True:
     try:
-        # read meter, might throw an exception
-        (temp, power) = read_meter(meter_port, logger, meter_timeout)
-        logger.info("meter returned %f W %f C" % (power, temp))
-
-        # update internet service - run as a daemon thread
-        xively_t = xively(feed_id, logging, timeout=xively_timeout)
-        xively_t.add_datapoint('temperature', temp)
-        xively_t.add_datapoint('energy', power)
-
-        # post uptime to help debugging
-        f=open("/proc/uptime","r");
-        uptime_string=f.readline()
-        f.close()
-        uptime=uptime_string.split()[0]
-        xively_t.add_datapoint('uptime', uptime)
-
-        # get difference in energy
-        (last, this) = diff_realtime.diff(power, logging)
-
-        # send to the wristband?
-        if last is not None:
-            logger.info("sending to wristband")
-            # this blocks but times out
-            wb.send(last, this)
-            xively_t.add_datapoint('wb-this', this)
+        try:
+            # read meter, might throw an exception
+            (temp, energy) = read_meter(meter_port, logger, meter_timeout)
+        except ValueError as e:
+            logger.warning(e)
+            # prevent rapid looping
+            time.sleep(1)
         else:
-            logger.info("not enough difference")
+            logger.info("meter returned %fW %fC" % (energy, temp))
+            energy_div = diff_realtime.energy_to_div(energy)
 
-        # time to fetch data from wristband?
-        if time.time() > last_data + data_interval:
-            last_data = time.time()
-            (battery, uptime) = wb.get()
-            xively_t.add_datapoint('wb-battery', battery)
-            xively_t.add_datapoint('wb-uptime', uptime)
+            # update internet service - run as a daemon thread
+            xively_t = xively(feed_id, logging, timeout=xively_timeout)
+            xively_t.add_datapoint('temperature', temp)
+            xively_t.add_datapoint('energy', energy)
 
-            # resend the last energy value in case a previous send failed
-            logger.info("resending last energy %d" % this)
-            wb.re_send(this)
+            # post uptime to help debugging
+            f=open("/proc/uptime","r");
+            uptime_string=f.readline()
+            f.close()
+            uptime=uptime_string.split()[0]
+            xively_t.add_datapoint('uptime', uptime)
 
-        logger.info("start xively thread")
-        xively_t.daemon = True
-        xively_t.start()
+            # get difference in energy
+            try:
+                last_energy_div = diff_realtime.diff(energy_div, logging)
+                # send to the wristband?
+                if energy_div != last_energy_div:
+                    # this blocks but times out
+                    wb.send(last_energy_div, energy_div)
+                    xively_t.add_datapoint('wb-this', energy_div)
+            except ValueError as e:
+                logger.debug(e)
 
-    except ValueError as e:
-        logger.error(e)
+            # time to fetch data from wristband?
+            if time.time() > last_data + data_interval:
+                last_data = time.time()
+                (battery, uptime) = wb.get()
+                xively_t.add_datapoint('wb-battery', battery)
+                xively_t.add_datapoint('wb-uptime', uptime)
+
+                # resend the last energy value in case a previous send failed
+                logger.info("resending last energy %d" % energy_div)
+                wb.re_send(this)
+
+            logger.info("start xively thread")
+            xively_t.daemon = True
+            xively_t.start()
+
+        # keep a track of running threads
+        logger.info("%d threads running", len(threading.enumerate()))
+
     except KeyboardInterrupt as e:
         logger.warning("caught interrupt - quitting")
         break
 
-    # keep a track of running threads
-    logger.info("%d threads running", len(threading.enumerate()))
-    # in case something goes wrong - prevent rapid looping
-    time.sleep(1)
 

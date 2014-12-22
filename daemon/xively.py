@@ -38,6 +38,6 @@ class xively(threading.Thread):
                              timeout=self.timeout)
             self.logger.info("sent")
         except mechanize.HTTPError as e:
-            self.logger.error("HTTP error: %s" % e)
+            self.logger.warning("HTTP error: %s" % e)
         except mechanize.URLError as e:
-            self.logger.error("URL error: %s" % e)
+            self.logger.warning("URL error: %s" % e)

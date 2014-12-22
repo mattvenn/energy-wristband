@@ -25,7 +25,7 @@ class wristband():
         self.run_command(cmd)
 
     def send(self, start, end):
-        self.logger.info("sending %d %d" % (start, end))
+        self.logger.info("sending %d %d to wristband" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)

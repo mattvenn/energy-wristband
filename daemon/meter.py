@@ -19,7 +19,7 @@ def read_meter(meter_port, logger, timeout=10):
         serial_port.flushInput()
 
         # this times out
-        logger.info("opened serial with %ds timeout" % serial_port.timeout)
+        logger.debug("opened serial with %ds timeout" % serial_port.timeout)
         msg = serial_port.readline()
         serial_port.close()
     else:
