@@ -48,7 +48,7 @@ while True:
             # read meter, might throw an exception
             (temp, energy) = read_meter(meter_port, logger, meter_timeout)
         except ValueError as e:
-            logger.warning(e)
+            logger.info(e)
             # prevent rapid looping
             time.sleep(1)
         else:
@@ -89,12 +89,12 @@ while True:
                 logger.info("resending last energy %d" % energy_div)
                 wb.re_send(energy_div)
 
-            logger.info("start xively thread")
+            logger.info("send data to xively")
             xively_t.daemon = True
             xively_t.start()
 
         # keep a track of running threads
-        logger.info("%d threads running", len(threading.enumerate()))
+        logger.debug("%d threads running", len(threading.enumerate()))
 
     except KeyboardInterrupt as e:
         logger.warning("caught interrupt - quitting")
