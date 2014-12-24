@@ -3,7 +3,8 @@ import threading
 import time
 import logging
 
-from meter import read_meter, Meter_Exception
+#from meter import read_meter, Meter_Exception
+from meter_photo import read_meter, Meter_Exception
 from wristband import wristband, WB_Exception
 import diff
 from xively import xively
