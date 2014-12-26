@@ -58,6 +58,7 @@ def read_energy(img,logger):
     segs = 0
     last_bright = 255
     fill = 0
+    change = False
     while d < arc_l:
         segs += 1
         d += arc_step
@@ -70,10 +71,11 @@ def read_energy(img,logger):
         box = (x, y, x+sample_w, y+sample_w)
         bright = avg_region(img,box)
         #print( "lb = %d, b= %d" % ( bright - last_bright, bright))
-        if (bright - last_bright )> sens:
+        if change == False and (bright - last_bright )> sens:
             #print( e_map[segs] )
             fill = 255
             segment = segs
+            change = False
         draw.rectangle(box,fill=fill)
         last_bright = bright
         """
