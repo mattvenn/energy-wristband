@@ -23,7 +23,7 @@ wristband_timeout = 10
 wb = wristband(logging, wristband_timeout)
 
 # get diff object
-diff = diff.diff_energy(logging)    
+diff = diff.diff_energy(logging,max_energy=4500)    
 
 # set this in the past so wristband is updated when daemon starts
 last_data = time.time() - data_interval
@@ -68,7 +68,7 @@ while True:
         # send/receive to the wristband? can raise exceptions
         try:
             # need to send?
-            if energy != last_energy:
+            if energy_div != last_energy_div:
                 xively_t.add_datapoint('wb-this', energy_div)
                 # this blocks but times out
                 wb.send(last_energy_div, energy_div)

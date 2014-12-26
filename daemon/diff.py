@@ -9,18 +9,17 @@ class diff_energy():
     
     max_time = 30  # seconds before we disregard any large changes
     num_divs = 4  # relate the change as a number from 1 to num_divs
-    max_energy = 3000  # watts - this should be adaptive
-    energy_per_div = max_energy / num_divs
     sensitivity = 50 #  in watts per second
 
-    def __init__(self, logging):
+    def __init__(self, logging,max_energy=3000):
         self.logging = logging
         self.hist = None
+        self.energy_per_div = max_energy / diff_energy.num_divs
 
     # limits between 1 and num_divs
     def energy_to_div(self,energy):
         # convert to div
-        div = int(energy / diff_energy.energy_per_div) + 1
+        div = int(energy / self.energy_per_div) + 1
 
         # limit
         if div > diff_energy.num_divs:
