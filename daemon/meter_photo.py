@@ -11,6 +11,7 @@ class Meter_Exception(Exception):
         super(Meter_Exception, self).__init__(message)
         self.message = message
 
+# map of energy for meter's bar graph
 e_map = [ 10, 50, 100, 150, 200, 250, 350, 450, 550, 650, 750, 950, 1150, 1350, 1550, 2000, 2500, 3000, 3500, 4000, 4500, 5500, 6500, 7500, 8500, 10000, 12000, 14000, 16000, 18000, ]
 
 def take_photo(timeout,logger):
@@ -26,7 +27,6 @@ def adjust(im):
     h = 350
     box = (80,60,w,h)
     region = im.crop(box)
-#region = ImageOps.autocontrast(region,cutoff=100)
     contr = ImageEnhance.Contrast(region)
     region = contr.enhance(2.0)
     return region
@@ -62,6 +62,7 @@ def read_energy(img,logger):
     while d < arc_l:
         segs += 1
         d += arc_step
+        # bars are not placed linearly:
         arc_step += 0.37
         deg = d - 90
         x = cent_x + length * math.cos(math.radians(deg))
@@ -70,25 +71,15 @@ def read_energy(img,logger):
         y = int(y)
         box = (x, y, x+sample_w, y+sample_w)
         bright = avg_region(img,box)
-        #print( "lb = %d, b= %d" % ( bright - last_bright, bright))
+        # detect end of bar graph by change in brightness of pixel
         if change == False and (bright - last_bright )> sens:
-            #print( e_map[segs] )
             fill = 255
             segment = segs
             change = False
         draw.rectangle(box,fill=fill)
         last_bright = bright
-        """
-        if bright > sens:
-            # on
-            draw.rectangle(box,fill=0)
-        else:
-            # off
-            draw.rectangle(box,fill=255)
-            segment += 1
-        """
 
-    logger.info("segs = %d segment = %d energy=%d" % (segs ,segment, e_map[segment])) 
+    logger.info("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
     img.save("read.jpg")
     return(e_map[segment])
 
