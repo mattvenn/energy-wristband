@@ -69,10 +69,11 @@ def read_energy(img,logger):
         y = int(y)
         box = (x, y, x+sample_w, y+sample_w)
         bright = avg_region(img,box)
-        print( "lb = %d, b= %d" % ( bright - last_bright, bright))
+        #print( "lb = %d, b= %d" % ( bright - last_bright, bright))
         if (bright - last_bright )> sens:
-            print( e_map[segs] )
+            #print( e_map[segs] )
             fill = 255
+            segment = segs
         draw.rectangle(box,fill=fill)
         last_bright = bright
         """
