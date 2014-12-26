@@ -50,6 +50,7 @@ while True:
     try:
         # read meter, might raise an exception
         (temp, energy) = read_meter(meter_port, logger, meter_timeout)
+        time.sleep(5)
         logger.info("meter returned %dW %.1fC" % (energy, temp))
 
         # update internet service - run as a daemon thread
