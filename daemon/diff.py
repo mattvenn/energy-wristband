@@ -9,7 +9,7 @@ class diff_energy():
     
     max_time = 30  # seconds before we disregard any large changes
     num_divs = 4  # relate the change as a number from 1 to num_divs
-    max_energy = 3000  # watts - this should be adaptive
+    max_energy = 4500  # watts - this should be adaptive
     energy_per_div = max_energy / num_divs
     sensitivity = 50 #  in watts per second
 
