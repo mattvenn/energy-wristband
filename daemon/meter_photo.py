@@ -79,6 +79,7 @@ def read_energy(img,logger):
         draw.rectangle(box,fill=fill)
         last_bright = bright
 
+    segment -= 1 # because list is 0 indexed
     logger.info("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
     img.save("read.jpg")
     return(e_map[segment])
