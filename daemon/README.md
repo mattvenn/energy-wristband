@@ -1,8 +1,15 @@
 # Todo
 
+* command line options
 
 # Done
 
+* change diff() method name to get_last() or something more meaningful
+* diff object borken because as history moves on the differential is repeated
+* diff_realtime was originally written for use on the command line. Perhaps
+ convert to object and do history storage internally rather than file system?
+* diff_realtime is broken now because it will return a diff if its just 100w
+ over the limit
 * work out if power or energy is correct term and use that only - it's ENERGY!
  in WATTS!
 * poll gatttool, don't wait the full 10 seconds

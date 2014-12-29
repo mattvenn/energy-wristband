@@ -7,14 +7,14 @@ import time
 
 class diff_energy():
     
-    max_time = 30  # seconds before we disregard any large changes
     num_divs = 4  # relate the change as a number from 1 to num_divs
-    sensitivity = 50 #  in watts per second
 
-    def __init__(self, logging,max_energy=3000):
+    def __init__(self, logging, max_energy=3000, sens=50, max_time=30):
         self.logging = logging
         self.hist = None
         self.energy_per_div = max_energy / diff_energy.num_divs
+        self.sens = sens  # in watts per second
+        self.max_time = max_time  # seconds before large change disregarded
 
     # limits between 1 and num_divs
     def energy_to_div(self,energy):
@@ -32,9 +32,12 @@ class diff_energy():
     def add_hist(self,energy):
         self.hist = {"t": time.time(), "e": energy}
 
-    # returns the last recorded energy, as long as it wasn't too long ago
-    # in which case, return the current energy
-    def diff(self, energy):
+    # records current energy
+    # returns the last recorded energy, as long as:
+    # * it wasn't too long ago
+    # * it was a big enough change from the current
+    # otherwise return the current energy
+    def get_last_valid(self, energy):
 
         now = time.time()
 
@@ -47,7 +50,7 @@ class diff_energy():
             return energy
 
         # too old
-        if hist["t"] + diff_energy.max_time < now:
+        if hist["t"] + self.max_time < now:
             self.logging.debug("history too old")
             return energy
 
@@ -59,8 +62,8 @@ class diff_energy():
 
         # if not enough of a change
         self.logging.info("energy diff = %f" % diff)
-        if diff < diff_energy.sensitivity: 
+        if diff < self.sens: 
             return energy
 
-        # otherwise return historical energy
+        # otherwise return valid historical energy point
         return hist["e"]
