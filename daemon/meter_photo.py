@@ -95,7 +95,7 @@ def read_meter(meter_port, logger, timeout=10):
     ret = take_photo(timeout,logger)
     if ret == -15:
         raise Meter_Exception("photo timed out")
-    logger.debub("took photo")
+    logger.debug("took photo")
 
     image_file = "meter.jpg"
     try:
