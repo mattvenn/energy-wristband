@@ -11,7 +11,6 @@ import diff
 from xively import xively
 
 
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
