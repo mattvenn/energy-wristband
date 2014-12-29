@@ -18,7 +18,8 @@ def take_photo(timeout,logger):
     cmd = '/usr/bin/fswebcam -q -d /dev/video0  -r 800x600 --no-banner  --set "Exposure, Auto"="Manual Mode" --set "Exposure (Absolute)"=200 --set brightness=50% --set "Exposure, Auto Priority"="False" meter.jpg'
     proc=Proc(cmd).call(timeout=timeout)
     #print proc.stdout
-    logger.info(proc.stderr)
+    if proc.stderr:
+        logger.warning(proc.stderr)
     return proc.return_code
 
 def adjust(im):
@@ -80,7 +81,7 @@ def read_energy(img,logger):
         last_bright = bright
 
     segment -= 1 # because list is 0 indexed
-    logger.info("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
+    logger.debug("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
     img.save("read.jpg")
     return(e_map[segment])
 
@@ -90,11 +91,11 @@ def read_meter(meter_port, logger, timeout=10):
         os.remove('meter.jpg')
     except OSError:
         pass
-    logger.info("taking photo with timeout = %d", timeout)
+    logger.debug("taking photo with timeout = %d", timeout)
     ret = take_photo(timeout,logger)
     if ret == -15:
         raise Meter_Exception("photo timed out")
-    logger.info("took photo")
+    logger.debub("took photo")
 
     image_file = "meter.jpg"
     try:
