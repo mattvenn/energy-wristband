@@ -66,3 +66,8 @@ someone to change their energy habits. But the method was too complex and
 expensive for the results. The only real applications found for the project were
 in public places.
 
+## Licenses
+
+* Hardware is licensed under the [CERN open hardware license 1.2](http://www.ohwr.org/attachments/2388/cern_ohl_v_1_2.txt)
+
+* Software is licensed under a Creative Commons Attribution 4.0 International License.
