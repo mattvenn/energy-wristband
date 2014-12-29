@@ -10,49 +10,6 @@ from wristband import wristband, WB_Exception
 import diff
 from xively import xively
 
-def loop():
-    # read meter, might raise an exception
-    (temp, energy) = read_meter(args.meter_port, logger, args.meter_timeout)
-    time.sleep(5)
-    logger.info("meter returned %dW %.1fC" % (energy, temp))
-
-    # update internet service - run as a daemon thread
-    xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
-    xively_t.daemon = True  # could this be done in the class?
-    xively_t.add_datapoint('temperature', temp)
-    xively_t.add_datapoint('energy', energy)
-
-    # get last good energy point
-    last_energy = diff.get_last_valid(energy)
-
-    # convert the real energies to divisions from 1 to 4
-    energy_div = diff.energy_to_div(energy)
-    last_energy_div = diff.energy_to_div(last_energy)
-
-    # send/receive to the wristband? can raise exceptions
-    try:
-        # need to send?
-        if energy_div != last_energy_div:
-            xively_t.add_datapoint('wb-this', energy_div)
-            # this blocks but times out
-            wb.send(last_energy_div, energy_div)
-
-        # need to fetch data from wristband?
-        if time.time() > last_data + data_interval:
-            last_data = time.time()
-            (battery, uptime) = wb.get()
-            xively_t.add_datapoint('wb-battery', battery)
-            xively_t.add_datapoint('wb-uptime', uptime)
-
-            # resend the last energy value in case a previous send failed
-            logger.info("resending last energy %d" % energy_div)
-            wb.re_send(energy_div)
-
-    except WB_Exception as e:
-        logger.warning(e)
-
-    logger.info("send data to xively")
-    xively_t.start()
 
 
 if __name__ == '__main__':
@@ -106,17 +63,57 @@ if __name__ == '__main__':
 
 
     # main loop
-    logger.warning("daemon started")
+    logging.warning("daemon started")
     while True:
         try:
-            # do all the work
-            loop()
-            # keep a track of running threads
-            logger.debug("%d threads running", len(threading.enumerate()))
+            # read meter, might raise an exception
+            (temp, energy) = read_meter(args.meter_port, logging, args.meter_timeout)
+            time.sleep(5)
+            logging.info("meter returned %dW %.1fC" % (energy, temp))
+
+            # update internet service - run as a daemon thread
+            xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
+            xively_t.daemon = True  # could this be done in the class?
+            xively_t.add_datapoint('temperature', temp)
+            xively_t.add_datapoint('energy', energy)
+
+            # get last good energy point
+            last_energy = diff.get_last_valid(energy)
+
+            # convert the real energies to divisions from 1 to 4
+            energy_div = diff.energy_to_div(energy)
+            last_energy_div = diff.energy_to_div(last_energy)
+
+            # send/receive to the wristband? can raise exceptions
+            try:
+                # need to send?
+                if energy_div != last_energy_div:
+                    xively_t.add_datapoint('wb-this', energy_div)
+                    # this blocks but times out
+                    wb.send(last_energy_div, energy_div)
+
+                # need to fetch data from wristband?
+                if time.time() > last_data + data_interval:
+                    last_data = time.time()
+                    (battery, uptime) = wb.get()
+                    xively_t.add_datapoint('wb-battery', battery)
+                    xively_t.add_datapoint('wb-uptime', uptime)
+
+                    # resend the last energy value in case a previous send failed
+                    logging.info("resending last energy %d" % energy_div)
+                    wb.re_send(energy_div)
+
+            except WB_Exception as e:
+                logging.warning(e)
+
+            logging.info("send data to xively")
+            xively_t.start()
         except Meter_Exception as e:
-            logger.info(e)
+            logging.info(e)
             # prevent rapid looping
             time.sleep(1)
         except KeyboardInterrupt as e:
-            logger.warning("caught interrupt - quitting")
+            logging.warning("caught interrupt - quitting")
             break
+        # keep a track of running threads
+        logging.debug("%d threads running", len(threading.enumerate()))
