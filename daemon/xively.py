@@ -5,7 +5,7 @@ import threading
 
 class xively(threading.Thread):
 
-    url_base = "http://api.pachube.com/v2/feeds/"
+    url_base = "http://api.xively.com/v2/feeds/"
     version = '1.0.0'
 
     def __init__(self, feed_id, logging, keyfile="api.key", timeout=5, uptime=False):
@@ -51,3 +51,12 @@ class xively(threading.Thread):
             self.logger.warning("HTTP error: %s" % e)
         except mechanize.URLError as e:
             self.logger.warning("URL error: %s" % e)
+
+
+if __name__ == '__main__':
+    feed_id = "130883"
+    xively_timeout = 10
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
+    xively_t.start()
