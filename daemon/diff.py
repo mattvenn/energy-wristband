@@ -61,7 +61,7 @@ class diff_energy():
         diff = abs(diff)
 
         # if not enough of a change
-        self.logging.info("energy diff = %f" % diff)
+        self.logging.debug("energy diff = %f" % diff)
         if diff < self.sens: 
             return energy
 

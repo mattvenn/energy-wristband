@@ -60,9 +60,9 @@ if __name__ == '__main__':
                         format=log_format,
                         filename='reader.log')
 
-
     # main loop
     logging.warning("daemon started")
+    logging.warning("max energy=%dW, sens=%dW/s" % (args.max_energy,args.sens))
     while True:
         try:
             # read meter, might raise an exception
