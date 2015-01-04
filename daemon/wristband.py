@@ -93,7 +93,7 @@ if __name__ == '__main__':
     parser.add_argument('--end', action='store', type=int, 
         help="end", default=4)
     parser.add_argument('--address', help="BLE address of wristband",
-        default = "E7:2C:35:BC:D2:B9")  # my prototype
+        default = None)
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
@@ -103,5 +103,4 @@ if __name__ == '__main__':
     s.send(args.start, args.end)
 
     # get battery level and uptime
-    (batt_level, uptime ) = s.get()
-    logging.info("got %fv %ds" % (batt_level, uptime))
+    s.get()

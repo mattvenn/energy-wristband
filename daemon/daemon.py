@@ -35,9 +35,9 @@ if __name__ == '__main__':
     parser.add_argument('--meter_timeout', type=int, help="meter timeout",
         default=10)
     parser.add_argument('--ble_address', help="BLE address of wristband",
-        default = "E7:2C:35:BC:D2:B9")  # my prototype
+        default = None)
     parser.add_argument('--xively_feed', help="id of your xively feed",
-        default = "130883")  # my feed
+        default = None)
 
     args = parser.parse_args()
 
@@ -66,8 +66,8 @@ if __name__ == '__main__':
     logging.warning("daemon started")
     logging.warning("max energy=%dW, sens=%dW/s" % (args.max_energy,args.sens))
     logging.warning("BLE address=%s" % args.ble_address)
-    if args.xively_feed:
-        logging.warning("xively feed id=%d" % args.xively_feed)
+    if args.xively_feed is not None:
+        logging.warning("xively feed id=%s" % args.xively_feed)
 
     # main loop
     while True:
