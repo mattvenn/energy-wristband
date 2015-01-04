@@ -22,6 +22,7 @@ class wristband():
         self.logger.debug("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
+
         if udp_repeat:
             self.udp = udp_send.UDP_send(logging)
 
@@ -32,8 +33,10 @@ class wristband():
         self.run_command(cmd)
 
     def send(self, start, end):
-        if self.udp:
+        try:
             self.udp.send(start, end, time.time())
+        except AttributeError:
+            pass
 
         self.logger.info("sending %d %d to wristband" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)

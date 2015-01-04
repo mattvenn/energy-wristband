@@ -3,6 +3,8 @@
 import socket
 import time
 import pickle
+from wristband import wristband, WB_Exception
+
 
 
 class UDP_get():
@@ -11,6 +13,9 @@ class UDP_get():
         self.port = port
         self.sock = socket.socket(socket.AF_INET,  # Internet
                              socket.SOCK_DGRAM)  # UDP
+        # send start and end
+        self.wb = wristband(logging, args.address,
+            timeout = args.timeout)
 
     def listen(self):
         self.logger.info("binding to port %d" % (self.port))
@@ -21,10 +26,7 @@ class UDP_get():
             self.logger.info("got [%d,%d,%d] from %s" % (
                 msg["start"], msg["end"], msg["seq"], addr))
             try:
-                # send start and end
-                s = wristband(logging, args.address,
-                    timeout = args.timeout)
-                s.send(msg["start"], msg["end"])
+                self.wb.send(msg["start"], msg["end"])
 
             except WB_Exception as e:
                 logging.error(e)
