@@ -34,7 +34,7 @@ if __name__ == '__main__':
         default="/dev/ttyUSB0")
     parser.add_argument('--meter_timeout', type=int, help="meter timeout",
         default=10)
-    parser.add_argument('--wb_address', help="BLE address of wristband",
+    parser.add_argument('--ble_address', help="BLE address of wristband",
         default = "E7:2C:35:BC:D2:B9")  # my prototype
     parser.add_argument('--xively_feed', help="id of your xively feed",
         default = "130883")  # my feed
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     # wrist band
     data_interval = 60 * 10  # seconds
     wristband_timeout = 10
-    wb = wristband(logging, args.wb_address, wristband_timeout)
+    wb = wristband(logging, args.ble_address, wristband_timeout)
 
     # get diff object
     diff = diff.diff_energy(logging, max_energy=args.max_energy,
@@ -62,9 +62,14 @@ if __name__ == '__main__':
                         format=log_format,
                         filename='reader.log')
 
-    # main loop
+    # startup messages
     logging.warning("daemon started")
     logging.warning("max energy=%dW, sens=%dW/s" % (args.max_energy,args.sens))
+    logging.warning("BLE address=%s" % args.ble_address)
+    if args.xively_feed:
+        logging.warning("xively feed id=%d" % args.xively_feed)
+
+    # main loop
     while True:
         try:
             # read meter, might raise an exception
