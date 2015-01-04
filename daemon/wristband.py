@@ -10,17 +10,15 @@ class WB_Exception(Exception):
 
 class wristband():
 
-    ble_mac = "E4:E2:39:0A:C5:A9"
-    ble_mac = "E1:40:D8:62:ED:1A"  # other rfduino
-    ble_mac = "E7:2C:35:BC:D2:B9"  # wb module
     ble_host = 'hci0'
-    gatt = "./gatttool"
+    gatt = "/usr/bin/gatttool"
 
-    def __init__(self, logging, timeout=10):
+    def __init__(self, logging, ble_address, timeout=10):
         self.timeout = timeout
         self.logger = logging.getLogger('bluetooth')
+        self.logger.debug("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
-            wristband.ble_host + " -b " + wristband.ble_mac
+            wristband.ble_host + " -b " + ble_address
 
     def re_send(self, start):
         self.logger.info("sending %d" % start)
@@ -86,12 +84,24 @@ class wristband():
 
 
 if __name__ == '__main__':
-    # from 0 to 1
-    start = int(sys.argv[1])
-    end = int(sys.argv[2])
+    import argparse
     import logging
+
+    parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
+    parser.add_argument('--start', action='store', type=int, 
+        help="start", default=1)
+    parser.add_argument('--end', action='store', type=int, 
+        help="end", default=4)
+    parser.add_argument('--address', help="BLE address of wristband",
+        default = "E7:2C:35:BC:D2:B9")  # my prototype
+
+    args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
-    s = wristband(logging)
-    s.send(start, end)
+
+    # send start and end
+    s = wristband(logging,args.address)
+    s.send(args.start, args.end)
+
+    # get battery level and uptime
     (batt_level, uptime ) = s.get()
     logging.info("got %fv %ds" % (batt_level, uptime))
