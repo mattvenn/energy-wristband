@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import sys
+import sys, time
 from easyprocess import Proc
+import plugins.udp_send as udp_send
 
 class WB_Exception(Exception):
     def __init__(self, message):
@@ -13,7 +14,7 @@ class wristband():
     ble_host = 'hci0'
     gatt = "/usr/bin/gatttool"
 
-    def __init__(self, logging, ble_address, timeout=10):
+    def __init__(self, logging, ble_address, timeout=10, udp_repeat=None):
         self.timeout = timeout
         if ble_address is None:
             raise WB_Exception("no BLE address given")
@@ -21,6 +22,8 @@ class wristband():
         self.logger.debug("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
+        if udp_repeat:
+            self.udp = udp_send.UDP_send(logging)
 
     def re_send(self, start):
         self.logger.info("sending %d" % start)
@@ -29,6 +32,9 @@ class wristband():
         self.run_command(cmd)
 
     def send(self, start, end):
+        if self.udp:
+            self.udp.send(start, end, time.time())
+
         self.logger.info("sending %d %d to wristband" % (start, end))
         send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
@@ -90,19 +96,25 @@ if __name__ == '__main__':
     import logging
 
     parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
+    parser.add_argument('--timeout', action='store', type=int, 
+        help="timeout for gatttool", default=10)
     parser.add_argument('--start', action='store', type=int, 
         help="start", default=1)
     parser.add_argument('--end', action='store', type=int, 
         help="end", default=4)
     parser.add_argument('--address', help="BLE address of wristband",
         default = None, required=True)
+    parser.add_argument('--udp_repeat', action='store_const', const=True,
+        default=False,
+        help="increase coverage by broadcasting via UDP to other computers")
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
 
     try:
         # send start and end
-        s = wristband(logging,args.address)
+        s = wristband(logging, args.address,
+            udp_repeat=args.udp_repeat, timeout = args.timeout)
         s.send(args.start, args.end)
 
         # get battery level and uptime
