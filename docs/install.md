@@ -5,11 +5,13 @@ Sun Jan  4 14:20:48 GMT 2015
 
 ## Python dependancies and Repo
 
-sudo apt-get install python-setuptools
-sudo easy_install pip
-git clone http://github.com/mattvenn/energy-wristband
-cd energy-wristband/daemon/
-pip install -r requirements.txt
+On the command line:
+
+    sudo apt-get install python-setuptools
+    sudo easy_install pip
+    git clone http://github.com/mattvenn/energy-wristband
+    cd energy-wristband/daemon/
+    pip install -r requirements.txt
 
 ## Bluetooth
 
