@@ -35,7 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--meter_timeout', type=int, help="meter timeout",
         default=10)
     parser.add_argument('--ble_address', help="BLE address of wristband",
-        default = None)
+        default = None, required=True)
     parser.add_argument('--xively_feed', help="id of your xively feed",
         default = None)
 
