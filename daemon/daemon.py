@@ -78,10 +78,11 @@ if __name__ == '__main__':
             logging.info("meter returned %dW %.1fC" % (energy, temp))
 
             # update internet service - run as a daemon thread
-            xively_t = xively(args.xively_feed, logging, timeout=xively_timeout, uptime=True)
-            xively_t.daemon = True  # could this be done in the class?
-            xively_t.add_datapoint('temperature', temp)
-            xively_t.add_datapoint('energy', energy)
+            if args.xively_feed is not None:
+                xively_t = xively(args.xively_feed, logging, timeout=xively_timeout, uptime=True)
+                xively_t.daemon = True  # could this be done in the class?
+                xively_t.add_datapoint('temperature', temp)
+                xively_t.add_datapoint('energy', energy)
 
             # get last good energy point
             last_energy = diff.get_last_valid(energy)
@@ -94,7 +95,8 @@ if __name__ == '__main__':
             try:
                 # need to send?
                 if energy_div != last_energy_div:
-                    xively_t.add_datapoint('wb-this', energy_div)
+                    if args.xively_feed is not None:
+                        xively_t.add_datapoint('wb-this', energy_div)
                     # this blocks but times out
                     wb.send(last_energy_div, energy_div)
 
@@ -102,8 +104,9 @@ if __name__ == '__main__':
                 if time.time() > last_data + data_interval:
                     last_data = time.time()
                     (battery, uptime) = wb.get()
-                    xively_t.add_datapoint('wb-battery', battery)
-                    xively_t.add_datapoint('wb-uptime', uptime)
+                    if args.xively_feed is not None:
+                        xively_t.add_datapoint('wb-battery', battery)
+                        xively_t.add_datapoint('wb-uptime', uptime)
 
                     # resend the last energy value in case a previous send failed
                     logging.info("resending last energy %d" % energy_div)
