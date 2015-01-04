@@ -14,7 +14,7 @@ class UDP_get():
                              socket.SOCK_DGRAM)  # UDP
 
     def listen(self):
-        self.logger.info("binding to %s:%d" % (self.ip, self.port))
+        self.logger.info("binding to port %d" % (self.port))
         self.sock.bind(('', self.port))
         while True:
             data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
