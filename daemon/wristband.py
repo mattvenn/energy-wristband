@@ -15,6 +15,8 @@ class wristband():
 
     def __init__(self, logging, ble_address, timeout=10):
         self.timeout = timeout
+        if ble_address is None:
+            raise WB_Exception("no BLE address given")
         self.logger = logging.getLogger('bluetooth')
         self.logger.debug("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
@@ -93,14 +95,17 @@ if __name__ == '__main__':
     parser.add_argument('--end', action='store', type=int, 
         help="end", default=4)
     parser.add_argument('--address', help="BLE address of wristband",
-        default = None)
+        default = None, required=True)
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
 
-    # send start and end
-    s = wristband(logging,args.address)
-    s.send(args.start, args.end)
+    try:
+        # send start and end
+        s = wristband(logging,args.address)
+        s.send(args.start, args.end)
 
-    # get battery level and uptime
-    s.get()
+        # get battery level and uptime
+        s.get()
+    except WB_Exception as e:
+        logging.error(e)
