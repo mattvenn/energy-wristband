@@ -6,7 +6,7 @@ import pickle
 
 
 class UDP_get():
-    def __init__(self,logging, ip='192.168.0.9', port=5000):
+    def __init__(self,logging, ip='192.168.0.9', port=50000):
         self.ip = ip
         self.logger = logging
         self.port = port
@@ -15,7 +15,7 @@ class UDP_get():
 
     def listen(self):
         self.logger.info("binding to %s:%d" % (self.ip, self.port))
-        self.sock.bind((self.ip, self.port))
+        self.sock.bind(('', self.port))
         while True:
             data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
             msg = pickle.loads(data)
