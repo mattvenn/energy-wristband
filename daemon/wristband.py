@@ -79,7 +79,7 @@ class wristband():
             raise WB_Exception("gatttool timed out")
         else:
             # an error?
-            raise WB_Exception("unexpected return code from gatttool: %d" % proc.return_code)
+            raise WB_Exception("gatttool returned error: %s" % proc.stderr)
 
 
 
