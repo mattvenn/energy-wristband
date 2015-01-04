@@ -34,17 +34,19 @@ if __name__ == '__main__':
         default="/dev/ttyUSB0")
     parser.add_argument('--meter_timeout', type=int, help="meter timeout",
         default=10)
+    parser.add_argument('--wb_address', help="BLE address of wristband",
+        default = "E7:2C:35:BC:D2:B9")  # my prototype
+    parser.add_argument('--xively_feed', help="id of your xively feed",
+        default = "130883")  # my feed
 
     args = parser.parse_args()
 
-    # for xively
-    feed_id = "130883"
     xively_timeout = 10
 
     # wrist band
     data_interval = 60 * 10  # seconds
     wristband_timeout = 10
-    wb = wristband(logging, wristband_timeout)
+    wb = wristband(logging, args.wb_address, wristband_timeout)
 
     # get diff object
     diff = diff.diff_energy(logging, max_energy=args.max_energy,
@@ -71,7 +73,7 @@ if __name__ == '__main__':
             logging.info("meter returned %dW %.1fC" % (energy, temp))
 
             # update internet service - run as a daemon thread
-            xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
+            xively_t = xively(args.xively_feed, logging, timeout=xively_timeout, uptime=True)
             xively_t.daemon = True  # could this be done in the class?
             xively_t.add_datapoint('temperature', temp)
             xively_t.add_datapoint('energy', energy)
@@ -105,8 +107,9 @@ if __name__ == '__main__':
             except WB_Exception as e:
                 logging.warning(e)
 
-            logging.info("send data to xively")
-            xively_t.start()
+            if args.xively_feed is not None:
+                logging.info("send data to xively")
+                xively_t.start()
         except Meter_Exception as e:
             logging.info(e)
             # prevent rapid looping
