@@ -8,11 +8,10 @@ class xively(threading.Thread):
     url_base = "http://api.xively.com/v2/feeds/"
     version = '1.0.0'
 
-    def __init__(self, feed_id, logging, keyfile="api.key", timeout=5, uptime=False):
+    def __init__(self, feed_id, logging, keyfile="xively.key", timeout=5, uptime=False):
         threading.Thread.__init__(self)
 
         # private key stored in a file
-        keyfile = "api.key"
         api_key = open(keyfile).readlines()[0].strip()
 
         self.feed_id = feed_id
