@@ -17,6 +17,9 @@ if __name__ == '__main__':
     
     #parser.add_argument('--fetch-data', action='store_true', help="fetch data for specific machine")
 
+    parser.add_argument('--udp_repeat', action='store_const', const=True,
+        default=False,
+        help="increase coverage by broadcasting via UDP to other computers")
     parser.add_argument('--max_energy', action='store', type=int,
         help="max energy", default=3000)
     parser.add_argument('--max_time', action='store', type=int,
@@ -46,7 +49,9 @@ if __name__ == '__main__':
     # wrist band
     data_interval = 60 * 10  # seconds
     wristband_timeout = 10
-    wb = wristband(logging, args.ble_address, wristband_timeout)
+    wb = wristband(logging, args.ble_address, 
+            wristband_timeout,
+            udp_repeat=args.udp_repeat)
 
     # get diff object
     diff = diff.diff_energy(logging, max_energy=args.max_energy,
