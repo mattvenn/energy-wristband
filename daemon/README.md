@@ -1,9 +1,15 @@
 # Todo
 
-* command line options
+* udp repeater stuff in progress
+    * needs to be added to firmware so wristband can ignore duplicates
+* use something different to xively - xively doesn't give easy free access
+ anymore
+* config file? - yes PLEASE!
+* plugins for meter and monitoring?
 
 # Done
 
+* command line options
 * change diff() method name to get_last() or something more meaningful
 * diff object borken because as history moves on the differential is repeated
 * diff_realtime was originally written for use on the command line. Perhaps
