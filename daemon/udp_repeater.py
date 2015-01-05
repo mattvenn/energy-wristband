@@ -42,12 +42,24 @@ if __name__ == '__main__':
         help="port", default=50000)
     parser.add_argument('--address', help="BLE address of wristband",
         default = None, required=True)
+    parser.add_argument('-d','--debug',
+        help='print lots of debugging statements',
+        action="store_const", dest="loglevel", const=logging.DEBUG,
+        default=logging.WARNING)
+    parser.add_argument('-v','--verbose',
+        help='be verbose',
+        action="store_const", dest="loglevel", const=logging.INFO)
 
     args = parser.parse_args()
-    logging.basicConfig(level=logging.INFO)
 
-    u = UDP_get(logging, port=args.port)
+    # set up logging to file
+    log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
+    logging.basicConfig(level=args.loglevel,
+                        format=log_format,
+                        filename='repeater.log')
+
+    repeater = UDP_get(logging, port=args.port)
 
     #start
-    u.listen()
+    repeater.listen()
 
