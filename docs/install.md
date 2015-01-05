@@ -18,9 +18,8 @@ On the command line:
 bluez for raspbian is old and doesn't support bluetooth low energy (BLE) very
 well. 
 
-Follow [these instructions to
-install](http://stackoverflow.com/questions/24853597/ble-gatttool-cannot-connect-even-though-device-is-discoverable-with-hcitool-lesc)
-a newer version.
+Follow [these instructions to install](http://www.elinux.org/RPi_Bluetooth_LE) a
+newer version.
 
 Then copy gatttool to /usr/bin:
 
