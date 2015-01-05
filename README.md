@@ -12,10 +12,6 @@ bargraph shows your current usage from 1 to 4.
 
 Realtime energy use can be queried by pressing the button.
 
-An accelerometer could be used to save battery life by putting the wristband to
-sleep when not worn. Alternatively, the base station could decrease
-communications during the night.
-
 ![system overview](docs/system-overview.png)
 
 ## Temporary ownership = maximum usage
@@ -46,7 +42,8 @@ I'm looking for:
 * [some photos](https://plus.google.com/photos/109869064118515349190/albums/6093503170218170657) 
 * [project log](docs/project_log.md)
 * [Schematic and board design](https://github.com/mattvenn/eagle-circuit-designs/tree/master/energy-wristband)
-* [Firmware for wristband](./firmware/)
+* [Firmware for wristband](./firmware/), including programming the wristband
+* [Setting up and installation](docs/install.md)
 * [Python daemon](./daemon/) for energy monitoring and wristband communication
 
 ## Context

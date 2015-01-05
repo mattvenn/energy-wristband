@@ -1,3 +1,48 @@
+# UDP repeater - or increasing range
+
+The main issue with the system is that bluetooth low energy just doesn't seem to
+have the range. I've tried extending range by [hacking the
+aerial](http://www.instructables.com/id/Increase-and-extend-the-range-of-a-USB-Bluetooth-d/),
+but it doesn't make much difference. 
+
+After putting the dongle on a usb extension cable at my parents the
+range got a lot better. I'm assuming that getting it further away from the wifi
+dongle (both at 2.4GHz) reduced interference and improved range.
+
+Strangely, doing the same thing in my (much smaller) flat - it didn't make much
+difference.
+
+So how to increase range. Well my laptop is on a fair amount, so while it's on
+why not use its bluetooth to pass the message on if the wristband is out of
+range from the pi?
+
+If the daemon is started with `--udp_repeat` then it will
+broadcast any wristband messages (default 192.168.0.255). 
+
+The [udp repeater](../daemon/udp_repeater.py) program can be started at boot,
+and will pass on messages received over UDP to the wristband if it's in range. 
+
+# Docs
+
+Written up an [install and FAQ/problem solving guide](install.md)
+
+# Christmas time tests
+
+After forgetting the energy sender unit of my current cost, I had to write a
+[program](http://www.mattvenn.net/2014/12/28/reading-a-geo-minim-energy-meter-with-a-webcam-and-python/) to read my Dad's energy meter with a camera!
+
+With that out of the way I was able to set everything up and try it out on my
+family. I've yet to make a quick survey and get them to fill it in.
+
+# Software dev
+
+Been reading up on exception handling - it's been difficult to get the code as
+clean as I want it. Some good info here:
+
+* http://nedbatchelder.com/text/exceptions-vs-status.html
+* https://docs.python.org/2/tutorial/errors.html
+* http://stackoverflow.com/questions/2901000/the-correct-way-to-define-an-exception-in-python-without-pylint-complaining
+
 # Usage notes
 
 * Not too big
@@ -7,6 +52,13 @@
     * show lights as animation for longer or repeat a few times
     * show low battery as a flashing red led
 * Worth thinking about BLE range extension or just give up on BLE?
+
+## More usage notes from Sun Dec 28 15:49:47 GMT 2014
+
+* putting blue tooth dongle on a usb extension lead made a big difference to
+ range
+* couple of big battery voltage drops - don't know why
+* alerts seem to be useful and appropriate
 
 # PCB assembly notes
 
@@ -76,6 +128,12 @@ dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 r
 ## Sun Dec 14 16:41:07 GMT 2014
 
 Slow usb bus speed broke audio playing. Set it back to how it was before and swapped the pihub hub for a pluggable one.
+
+## Sun Dec 21 09:45:51 GMT 2014
+
+Was working, then started music which didn't work. Then hcitool lescan failed.
+So probably a usb contention issue with the Pi. Will check this with a simpler
+setup. My home pi has about 8 USB devices attached.
 
 # PCBs designed
 

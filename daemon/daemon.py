@@ -61,7 +61,7 @@ if __name__ == '__main__':
     # set this in the past so wristband is updated when daemon starts
     last_data = time.time() - data_interval
 
-    # set up logging to file - see previous section for more details
+    # set up logging to file
     log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
     logging.basicConfig(level=args.loglevel,
                         format=log_format,
