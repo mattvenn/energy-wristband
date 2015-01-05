@@ -1,3 +1,9 @@
+# Road map
+
+* survey
+* instructions
+* spare kit of stuff in a box
+
 # UDP repeater - or increasing range
 
 The main issue with the system is that bluetooth low energy just doesn't seem to
