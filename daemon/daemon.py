@@ -105,17 +105,19 @@ if __name__ == '__main__':
                     # this blocks but times out
                     wb.send(last_energy_div, energy_div)
 
-                # need to fetch data from wristband?
+                # need to fetch/update wristband?
                 if time.time() > last_data + data_interval:
                     last_data = time.time()
+
+                    # resend last energy value in case previous send failed
+                    logging.info("resending last energy %d" % energy_div)
+                    wb.re_send(energy_div)
+
+                    # fetch data
                     (battery, uptime) = wb.get()
                     if args.xively_feed is not None:
                         xively_t.add_datapoint('wb-battery', battery)
                         xively_t.add_datapoint('wb-uptime', uptime)
-
-                    # resend the last energy value in case a previous send failed
-                    logging.info("resending last energy %d" % energy_div)
-                    wb.re_send(energy_div)
 
             except WB_Exception as e:
                 logging.warning(e)
