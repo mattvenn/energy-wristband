@@ -23,23 +23,31 @@ class wristband():
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
 
+        self.udp_repeat = udp_repeat
         if udp_repeat:
             self.udp = udp_send.UDP_send(logging)
 
     def re_send(self, start):
+        # send out on udp
+        if udp_repeat:
+            self.udp.send('resend',start)
+
         self.logger.info("sending %d" % start)
         send = hex(start)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
 
     def send(self, start, end):
-        try:
-            self.udp.send(start, end, time.time())
-        except AttributeError:
-            pass
+        # seq is to avoid repeated warnings with udp repeaters
+        seq = time.strftime("%S")
 
-        self.logger.info("sending %d %d to wristband" % (start, end))
-        send = hex(start)[2:].zfill(2) + hex(end)[2:].zfill(2)
+        # send out on udp
+        if udp_repeat:
+            self.udp.send('send', start, end, seq)
+
+        self.logger.info("sending %d %d %d to wristband" % (start, end, seq))
+        send = hex(start)[2:].zfill(2) + \
+            hex(end)[2:].zfill(2) + hex(seq)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
 

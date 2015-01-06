@@ -14,13 +14,18 @@ class UDP_send():
                              socket.SOCK_DGRAM)  # UDP
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
-    def send(self, start, end, seq):
-        message = {'start': start, 'end': end, 'seq': seq}
-        data = pickle.dumps(message)
+    def resend(self, start):
+        self.send_udp({'type': 'resend', 'start': start})
 
-        self.logger.info("send [%d,%d,%d] to %s:%d" % 
-                            (start, end, seq, self.ip, self.port))
+    # seq is to avoid repeated warnings with udp repeaters
+    def send(self, start, end, seq):
+        self.send_udp({'type': 'send', 'start': start, 'end': end,
+                         'seq': seq})
+
+    def send_udp(self, message):
+        data = pickle.dumps(message)
         self.sock.sendto(data, (self.ip, self.port))
+        self.logger.info("sent to %s:%d" % (self.ip, self.port))
 
 if __name__ == '__main__':
     import logging
