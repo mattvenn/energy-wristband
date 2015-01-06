@@ -28,7 +28,7 @@ class UDP_get():
                 if msg["type"] == "send":
                     self.wb.send(msg["start"], msg["end"], msg["seq"])
                 if msg["type"] == "resend":
-                    self.wb.resend(msg["start"])
+                    self.wb.re_send(msg["start"])
 
             except WB_Exception as e:
                 logging.error(e)
