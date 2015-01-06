@@ -38,10 +38,12 @@ class wristband():
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
 
-    def send(self, start, end):
+    def send(self, start, end, seq=None):
         # seq is to avoid repeated warnings with udp repeaters
+        # it can either be provided, or will be generated using
         # last 4 digits of current time expressed in seconds
-        seq = int(str(int(time.time()))[-4:])
+        if seq is None:
+            seq = int(str(int(time.time()))[-4:])
 
         # send out on udp
         if self.udp_repeat:

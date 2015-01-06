@@ -23,7 +23,7 @@ class UDP_get():
         while True:
             data, addr = self.sock.recvfrom(1024) # buffer size is 1024 bytes
             msg = pickle.loads(data)
-            self.logger.info("got a %d from %s" % (msg["type"], addr))
+            self.logger.info("got a %s message from %s" % (msg["type"], addr))
             try:
                 if msg["type"] == "send":
                     self.wb.send(msg["start"], msg["end"], msg["seq"])
