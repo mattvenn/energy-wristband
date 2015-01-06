@@ -23,13 +23,14 @@ class wristband():
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
 
+        self.seq = 0
         self.udp_repeat = udp_repeat
         if udp_repeat:
             self.udp = udp_send.UDP_send(logging)
 
     def re_send(self, start):
         # send out on udp
-        if udp_repeat:
+        if self.udp_repeat:
             self.udp.send('resend',start)
 
         self.logger.info("sending %d" % start)
@@ -39,10 +40,11 @@ class wristband():
 
     def send(self, start, end):
         # seq is to avoid repeated warnings with udp repeaters
-        seq = time.strftime("%S")
+        # last 4 digits of current time expressed in seconds
+        seq = int(str(int(time.time()))[-4:])
 
         # send out on udp
-        if udp_repeat:
+        if self.udp_repeat:
             self.udp.send('send', start, end, seq)
 
         self.logger.info("sending %d %d %d to wristband" % (start, end, seq))
