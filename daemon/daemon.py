@@ -65,7 +65,7 @@ if __name__ == '__main__':
     log_format = '%(asctime)s %(name)-10s %(levelname)-8s %(message)s'
     logging.basicConfig(level=args.loglevel,
                         format=log_format,
-                        filename='reader.log')
+                        filename='daemon.log')
 
     # startup messages
     logging.warning("daemon started")
