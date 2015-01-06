@@ -31,7 +31,7 @@ class wristband():
     def re_send(self, start):
         # send out on udp
         if self.udp_repeat:
-            self.udp.resend(start)
+            self.udp.re_send(start)
 
         self.logger.info("sending %d" % start)
         send = hex(start)[2:].zfill(2)

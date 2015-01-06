@@ -14,7 +14,7 @@ class UDP_send():
                              socket.SOCK_DGRAM)  # UDP
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
-    def resend(self, start):
+    def re_send(self, start):
         self.send_udp({'type': 'resend', 'start': start})
 
     # seq is to avoid repeated warnings with udp repeaters
