@@ -115,6 +115,8 @@ if __name__ == '__main__':
         help="timeout for gatttool", default=10)
     parser.add_argument('--start', action='store', type=int, 
         help="start", default=1)
+    parser.add_argument('--resend', action='store_const', const=True,
+        help="update instead of alert", default=False)
     parser.add_argument('--end', action='store', type=int, 
         help="end", default=4)
     parser.add_argument('--address', help="BLE address of wristband",
@@ -130,7 +132,10 @@ if __name__ == '__main__':
         # send start and end
         s = wristband(logging, args.address,
             udp_repeat=args.udp_repeat, timeout = args.timeout)
-        s.send(args.start, args.end)
+        if args.resend:
+            s.re_send(args.start)
+        else:
+            s.send(args.start, args.end)
 
         # get battery level and uptime
         s.get()
