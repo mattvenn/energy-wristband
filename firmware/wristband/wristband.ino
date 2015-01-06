@@ -18,6 +18,8 @@ const int max_motor = 200;  // max motor pwm
 const double comm_timeout = 1000 * 60 * 15; // 15 minutes
 
 int last_reading = 0;
+// each update message has as sequence number to avoid repeated warnings
+int last_seq = -1; 
 double last_comms = 0;
 
 // struct to send messages back
@@ -160,15 +162,21 @@ void RFduinoBLE_onReceive(char *data, int len)
         // then just set the last_reading, so wristband can be silently updated
         last_reading = data[0];
     }
-    else if(len == 2)
+    else if(len == 3)
     {
         // flash & vibe
         #ifdef SERIAL_DEBUG
         Serial.println(data[0], DEC);
         Serial.println(data[1], DEC);
+        Serial.println(data[2], DEC);
         #endif
         last_reading = data[1];
-        indicate(data[0], data[1]);
+        int seq = data[2];
+        if(seq != last_seq)
+        {
+            indicate(data[0], data[1]);
+            last_seq = seq;
+        }
     }  
 }
 
