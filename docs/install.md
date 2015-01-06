@@ -80,9 +80,17 @@ Edit crontab:
 
     crontab -e
 
-And add this line (using the arguments for your setup):
+I've found bluetooth + raspberry pi + usb to be unreliable, and these extra
+lines have helped:
 
-    @reboot cd energy-wristband/daemon ; ./daemon --your-args-here
+    #give a kick after boot
+    @reboot sudo hciconfig hci0 down; sudo hciconfig hci0 up
+
+    #every hour restart device
+    0 * * * * sudo hciconfig hci0 down; sudo hciconfig hci0 up
+
+    #start the e-wb daemon
+    @reboot cd ~/energy-wristband/daemon/ ; ./daemon.py -v --ble_address E7:2C:35:BC:D2:B9 --xively_feed 130883 --udp_repeat
 
 ## Problems
 
