@@ -41,9 +41,10 @@ class wristband():
     def send(self, start, end, seq=None):
         # seq is to avoid repeated warnings with udp repeaters
         # it can either be provided, or will be generated using
-        # last 4 digits of current time expressed in seconds
+        # last 3 digits of current time expressed in seconds
+        # can only be up to one byte
         if seq is None:
-            seq = int(str(int(time.time()))[-4:])
+            seq = int(str(int(time.time()))[-3:]) % 255
 
         # send out on udp
         if self.udp_repeat:
