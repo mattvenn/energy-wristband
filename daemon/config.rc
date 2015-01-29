@@ -1,10 +1,12 @@
 [ble]
-address = E7:2C:35:BC:D2:B9
+# address = E7:2C:35:BC:D2:B9
+address = E1:40:D8:62:ED:1A ;address of wristband
+timeout = 10 ;time to wait before giving up on bluetooth message
 
 [energy]
-max_energy = 3000
-max_time = 30
-sensitivity = 50
+max_energy = 3000 ;for all 4 lights on wristband to light
+max_time = 30 ;time before last energy reading is disregarded
+sensitivity = 50 ;sensitivity to change in W/s
 
 [daemon]
-udp_repeat = True
+udp_repeat = True ;should we send out messages over UDP to increase BLE coverage
