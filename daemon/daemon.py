@@ -15,17 +15,24 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
     
-    #parser.add_argument('--fetch-data', action='store_true', help="fetch data for specific machine")
+    from ConfigParser import ConfigParser, NoSectionError
+    config = ConfigParser()
+    config.read('config.rc')
+    d_ble_address = config.get('ble', 'address')
+    d_max_energy = config.get('energy', 'max_energy')
+    d_max_time = config.get('energy', 'max_time')
+    d_sens = config.get('energy', 'sensitivity')
+    d_udp_repeat = config.get('daemon', 'udp_repeat')
 
     parser.add_argument('--udp_repeat', action='store_const', const=True,
-        default=False,
+        default=d_udp_repeat,
         help="increase coverage by broadcasting via UDP to other computers")
     parser.add_argument('--max_energy', action='store', type=int,
-        help="max energy", default=3000)
+        help="max energy", default=d_max_energy)
     parser.add_argument('--max_time', action='store', type=int,
-        help="max time before disregarding energy", default=30)
+        help="max time before disregarding energy", default=d_max_time)
     parser.add_argument('--sens', action='store', type=int,
-        help="sensitivity of differentiation in W/s", default=50)
+        help="sensitivity of differentiation in W/s", default=d_sens)
     parser.add_argument('-d','--debug',
         help='print lots of debugging statements',
         action="store_const", dest="loglevel", const=logging.DEBUG,
@@ -38,7 +45,7 @@ if __name__ == '__main__':
     parser.add_argument('--meter_timeout', type=int, help="meter timeout",
         default=10)
     parser.add_argument('--ble_address', help="BLE address of wristband",
-        default = None, required=True)
+        default = d_ble_address)
     parser.add_argument('--xively_feed', help="id of your xively feed",
         default = None)
 

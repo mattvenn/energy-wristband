@@ -37,13 +37,18 @@ if __name__ == '__main__':
     import argparse
     import logging
 
+    from ConfigParser import ConfigParser, NoSectionError
+    config = ConfigParser()
+    config.read('config.rc')
+    d_ble_address = config.get('ble', 'address')
+
     parser = argparse.ArgumentParser(description="listen to UDP, pass on to wristband")
     parser.add_argument('--timeout', action='store', type=int, 
         help="timeout for gatttool", default=10)
     parser.add_argument('--port', action='store', type=int, 
         help="port", default=50000)
     parser.add_argument('--address', help="BLE address of wristband",
-        default = None, required=True)
+        default = d_ble_address)
     parser.add_argument('-d','--debug',
         help='print lots of debugging statements',
         action="store_const", dest="loglevel", const=logging.DEBUG,

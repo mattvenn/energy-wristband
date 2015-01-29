@@ -1,0 +1,10 @@
+[ble]
+address = E7:2C:35:BC:D2:B9
+
+[energy]
+max_energy = 3000
+max_time = 30
+sensitivity = 50
+
+[daemon]
+udp_repeat = True

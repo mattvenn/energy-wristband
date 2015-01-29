@@ -4,6 +4,7 @@ import sys, time
 from easyprocess import Proc
 import plugins.udp_send as udp_send
 
+
 class WB_Exception(Exception):
     def __init__(self, message):
         super(WB_Exception, self).__init__(message)
@@ -110,6 +111,10 @@ class wristband():
 if __name__ == '__main__':
     import argparse
     import logging
+    from ConfigParser import ConfigParser, NoSectionError
+    config = ConfigParser()
+    config.read('config.rc')
+    d_ble_address = config.get('ble', 'address')
 
     parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
     parser.add_argument('--timeout', action='store', type=int, 
@@ -121,10 +126,11 @@ if __name__ == '__main__':
     parser.add_argument('--end', action='store', type=int, 
         help="end", default=4)
     parser.add_argument('--address', help="BLE address of wristband",
-        default = None, required=True)
+        default = d_ble_address)
     parser.add_argument('--udp_repeat', action='store_const', const=True,
         default=False,
         help="increase coverage by broadcasting via UDP to other computers")
+    
 
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
