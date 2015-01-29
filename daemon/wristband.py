@@ -20,7 +20,7 @@ class wristband():
         if ble_address is None:
             raise WB_Exception("no BLE address given")
         self.logger = logging.getLogger('bluetooth')
-        self.logger.debug("address = %s" % ble_address)
+        self.logger.info("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
 
