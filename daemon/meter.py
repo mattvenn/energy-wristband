@@ -47,3 +47,9 @@ def read_meter(meter_port, logger, timeout=10):
         raise Meter_Exception("couldn't parse msg [%s]" % msg)
 
     return round(float(m.group(1)),2), round(float(m.group(2)),2)
+
+if __name__ == '__main__':
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    temp,power = read_meter('/dev/ttyUSB0',logging)
+    print("%dC %dW" % (temp, power))
