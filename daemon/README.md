@@ -2,6 +2,7 @@
 
 * use something different to xively - xively doesn't give easy free access
  anymore
+    * thingspeak?
 * plugins for meter and monitoring?
 
 # Done

@@ -2,6 +2,10 @@ import mechanize
 import json
 import threading
 
+class Xively_Exception(Exception):
+    def __init__(self, message):
+        super(Xively_Exception, self).__init__(message)
+        self.message = message
 
 class xively(threading.Thread):
 
@@ -12,7 +16,10 @@ class xively(threading.Thread):
         threading.Thread.__init__(self)
 
         # private key stored in a file
-        api_key = open(keyfile).readlines()[0].strip()
+        try:
+            api_key = open(keyfile).readlines()[0].strip()
+        except IOError as e:
+            raise Xively_Exception("missing api key file: xively.key")
 
         self.feed_id = feed_id
         self.timeout = timeout

@@ -41,10 +41,11 @@ if __name__ == '__main__':
     config = ConfigParser()
     config.read('config.rc')
     d_ble_address = config.get('ble', 'address')
+    d_ble_timeout = config.get('ble', 'timeout')
 
     parser = argparse.ArgumentParser(description="listen to UDP, pass on to wristband")
     parser.add_argument('--timeout', action='store', type=int, 
-        help="timeout for gatttool", default=10)
+        help="timeout for gatttool", default=d_ble_timeout)
     parser.add_argument('--port', action='store', type=int, 
         help="port", default=50000)
     parser.add_argument('--address', help="BLE address of wristband",

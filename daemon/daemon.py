@@ -8,7 +8,7 @@ from meter import read_meter, Meter_Exception
 #from meter_photo import read_meter, Meter_Exception
 from wristband import wristband, WB_Exception
 import diff
-from xively import xively
+from xively import xively, Xively_Exception
 
 
 if __name__ == '__main__':
@@ -19,6 +19,7 @@ if __name__ == '__main__':
     config = ConfigParser()
     config.read('config.rc')
     d_ble_address = config.get('ble', 'address')
+    d_ble_timeout = config.get('ble', 'timeout')
     d_max_energy = config.get('energy', 'max_energy')
     d_max_time = config.get('energy', 'max_time')
     d_sens = config.get('energy', 'sensitivity')
@@ -46,6 +47,8 @@ if __name__ == '__main__':
         default=10)
     parser.add_argument('--ble_address', help="BLE address of wristband",
         default = d_ble_address)
+    parser.add_argument('--wristband_timeout', action='store', type=int, 
+        help="timeout for gatttool", default=d_ble_timeout)
     parser.add_argument('--xively_feed', help="id of your xively feed",
         default = None)
 
@@ -55,9 +58,8 @@ if __name__ == '__main__':
 
     # wrist band
     data_interval = 60 * 10  # seconds
-    wristband_timeout = 10
     wb = wristband(logging, args.ble_address, 
-            wristband_timeout,
+            args.wristband_timeout,
             udp_repeat=args.udp_repeat)
 
     # get diff object
@@ -77,7 +79,7 @@ if __name__ == '__main__':
     # startup messages
     logging.warning("daemon started")
     logging.warning("max energy=%dW, sens=%dW/s" % (args.max_energy,args.sens))
-    logging.warning("BLE address=%s" % args.ble_address)
+    logging.warning("BLE address=%s timeout=%d" % (args.ble_address, args.wristband_timeout))
     if args.xively_feed is not None:
         logging.warning("xively feed id=%s" % args.xively_feed)
 
@@ -138,6 +140,13 @@ if __name__ == '__main__':
             time.sleep(1)
         except KeyboardInterrupt as e:
             logging.warning("caught interrupt - quitting")
+            break
+        except Xively_Exception as e:
+            logging.error(e)
+            break 
+        except Exception as e: # catch all
+            logging.error("unexpected error!")
+            logging.error(e)
             break
         # keep a track of running threads
         logging.debug("%d threads running", len(threading.enumerate()))

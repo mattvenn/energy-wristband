@@ -115,10 +115,11 @@ if __name__ == '__main__':
     config = ConfigParser()
     config.read('config.rc')
     d_ble_address = config.get('ble', 'address')
+    d_ble_timeout = config.get('ble', 'timeout')
 
     parser = argparse.ArgumentParser(description="read meter, post to internet and send to energy wristband")
     parser.add_argument('--timeout', action='store', type=int, 
-        help="timeout for gatttool", default=10)
+        help="timeout for gatttool", default=d_ble_timeout)
     parser.add_argument('--start', action='store', type=int, 
         help="start", default=1)
     parser.add_argument('--resend', action='store_const', const=True,
