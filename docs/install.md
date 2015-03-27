@@ -64,7 +64,7 @@ Run the daemon like this:
 
     ./daemon.py --debug --wb_address XX:XX:XX:XX:XX:XX
 
-The daemon runs silently, so check reader.log for lots of debugging information.
+The daemon runs silently, so check daemon.log for lots of debugging information.
 When things are running ok, you can remove --debug or replace it with --verbose
 as you wish.
 
@@ -108,7 +108,8 @@ older version of bluez. Check the link above about installing a newer version.
     sudo hcitool hci0 down
     sudo hcitool hci0 up
 
-If this works then you can put the commands above in your /etc/rc.local so it gets done at boot.
+If this works then you can put the commands above in your crontab or
+/etc/rc.local so it gets done at boot (see section above on crontab)
 
 ### problematic bluetooth adapters
 

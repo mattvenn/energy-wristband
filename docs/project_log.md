@@ -1,8 +1,21 @@
+# Battery test
+
+On the 2nd prototype I've left off the potential divider resistors so I can't
+measure battery, but power consumption drops from about 20ua to 5ua while
+sleeping.
+
+Found that the usb connector isn't soldered properly on the 2nd one ;(
+
 # Road map
 
-* survey
-* instructions
+* feedback survey - make a survey for my family to fill
+* beta test survey - to find most appropriate testers
+* promote beta test survey
+* instructions - on how to use, range, setup, troubleshooting
 * spare kit of stuff in a box
+* send off kit
+* get results, send feedback survey
+* repeat, build a support group of interested people
 
 # UDP repeater - or increasing range
 
