@@ -1,3 +1,7 @@
+% Energy Wristband
+% Matt Venn
+%
+
 # Energy Wristband
 
 Learning about home electrical energy usage with wearable electronics.
