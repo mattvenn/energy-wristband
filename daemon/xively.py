@@ -1,6 +1,9 @@
 import mechanize
 import json
 import threading
+import logging
+
+log = logging.getLogger(__name__)
 
 class Xively_Exception(Exception):
     def __init__(self, message):
@@ -12,7 +15,7 @@ class xively(threading.Thread):
     url_base = "http://api.xively.com/v2/feeds/"
     version = '1.0.0'
 
-    def __init__(self, feed_id, logging, keyfile="xively.key", timeout=5, uptime=False):
+    def __init__(self, feed_id, keyfile="xively.key", timeout=5, uptime=False):
         threading.Thread.__init__(self)
 
         # private key stored in a file
@@ -23,7 +26,6 @@ class xively(threading.Thread):
 
         self.feed_id = feed_id
         self.timeout = timeout
-        self.logger = logging.getLogger('xively')
 
         self.opener = mechanize.build_opener()
         self.opener.addheaders = [('X-ApiKey', api_key)]
@@ -52,17 +54,16 @@ class xively(threading.Thread):
         try:
             self.opener.open(url, json.dumps(self.payload),
                              timeout=self.timeout)
-            self.logger.info("sent")
+            log.info("sent")
         except mechanize.HTTPError as e:
-            self.logger.warning("HTTP error: %s" % e)
+            log.warning("HTTP error: %s" % e)
         except mechanize.URLError as e:
-            self.logger.warning("URL error: %s" % e)
+            log.warning("URL error: %s" % e)
 
 
 if __name__ == '__main__':
     feed_id = "130883"
     xively_timeout = 10
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    xively_t = xively(feed_id, logging, timeout=xively_timeout, uptime=True)
+    logging.basicConfig(level=logging.DEBUG)
+    xively_t = xively(feed_id, timeout=xively_timeout, uptime=True)
     xively_t.start()

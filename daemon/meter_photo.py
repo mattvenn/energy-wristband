@@ -5,6 +5,9 @@ import math
 import os
 import time
 from easyprocess import Proc
+import logging
+
+log = logging.getLogger(__name__)
 
 class Meter_Exception(Exception):
     def __init__(self, message):
@@ -14,12 +17,12 @@ class Meter_Exception(Exception):
 # map of energy for meter's bar graph
 e_map = [ 10, 50, 100, 150, 200, 250, 350, 450, 550, 650, 750, 950, 1150, 1350, 1550, 2000, 2500, 3000, 3500, 4000, 4500, 5500, 6500, 7500, 8500, 10000, 12000, 14000, 16000, 18000, ]
 
-def take_photo(timeout,logger):
+def take_photo(timeout):
     cmd = '/usr/bin/fswebcam -q -d /dev/video0  -r 800x600 --no-banner  --set "Exposure, Auto"="Manual Mode" --set "Exposure (Absolute)"=200 --set brightness=50% --set "Exposure, Auto Priority"="False" meter.jpg'
     proc=Proc(cmd).call(timeout=timeout)
     #print proc.stdout
     if proc.stderr:
-        logger.warning(proc.stderr)
+        log.warning("problem taking photo with command [%s] : %s" % (cmd, proc.stderr))
     return proc.return_code
 
 def adjust(im):
@@ -39,7 +42,7 @@ def avg_region(image,box):
     stat = ImageStat.Stat(region)
     return stat.mean[0]
 
-def read_energy(img,logger):
+def read_energy(img):
     draw = ImageDraw.Draw(img)
     img_width = img.size[0]
     img_height = img.size[1]
@@ -81,21 +84,21 @@ def read_energy(img,logger):
         last_bright = bright
 
     segment -= 1 # because list is 0 indexed
-    logger.debug("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
+    log.debug("found seg change at %d, energy = %dW" % (segment, e_map[segment])) 
     img.save("read.jpg")
     return(e_map[segment])
 
 
-def read_meter(meter_port, logger, timeout=10):
+def read_meter(meter_port, timeout=10):
     try:
         os.remove('meter.jpg')
     except OSError:
         pass
-    logger.debug("taking photo with timeout = %d", timeout)
-    ret = take_photo(timeout,logger)
+    log.debug("taking photo with timeout = %d", timeout)
+    ret = take_photo(timeout)
     if ret == -15:
         raise Meter_Exception("photo timed out")
-    logger.debug("took photo")
+    log.debug("took photo")
 
     image_file = "meter.jpg"
     try:
@@ -106,12 +109,11 @@ def read_meter(meter_port, logger, timeout=10):
 
     img = adjust(img)
 
-    energy = read_energy(img,logger)
+    energy = read_energy(img)
     temp = 20  # fake
     #img.show()
     return temp, energy
 
 if __name__ == '__main__':
-    import logging
     logging.basicConfig(level=logging.INFO)
-    print(read_meter(None,logging))
+    print(read_meter(None))

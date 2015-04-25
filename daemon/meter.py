@@ -1,6 +1,9 @@
 import serial
 import time
 import re
+import logging
+
+log = logging.getLogger(__name__)
 
 serial_debug = False
 
@@ -14,7 +17,7 @@ class Meter_Exception(Exception):
         super(Meter_Exception, self).__init__(message)
         self.message = message
 
-def read_meter(meter_port, logger, timeout=10):
+def read_meter(meter_port, timeout=10):
     if not serial_debug:
         serial_port = serial.Serial()
         serial_port.port = meter_port
@@ -24,7 +27,7 @@ def read_meter(meter_port, logger, timeout=10):
         serial_port.flushInput()
 
         # this times out
-        logger.debug("opened serial with %ds timeout" % serial_port.timeout)
+        log.debug("opened serial with %ds timeout" % serial_port.timeout)
         msg = serial_port.readline()
         serial_port.close()
     else:
@@ -49,7 +52,6 @@ def read_meter(meter_port, logger, timeout=10):
     return round(float(m.group(1)),2), round(float(m.group(2)),2)
 
 if __name__ == '__main__':
-    import logging
     logging.basicConfig(level=logging.INFO)
-    temp,power = read_meter('/dev/ttyUSB0',logging)
+    temp,power = read_meter('/dev/ttyUSB0')
     print("%dC %dW" % (temp, power))

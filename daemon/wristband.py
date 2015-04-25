@@ -3,7 +3,9 @@
 import sys, time
 from easyprocess import Proc
 import plugins.udp_send as udp_send
+import logging
 
+log = logging.getLogger(__name__)
 
 class WB_Exception(Exception):
     def __init__(self, message):
@@ -15,26 +17,25 @@ class wristband():
     ble_host = 'hci0'
     gatt = "/usr/bin/gatttool"
 
-    def __init__(self, logging, ble_address, timeout=10, udp_repeat=None):
+    def __init__(self, ble_address, timeout=10, udp_repeat=False):
         self.timeout = timeout
         if ble_address is None:
             raise WB_Exception("no BLE address given")
-        self.logger = logging.getLogger('bluetooth')
-        self.logger.info("address = %s" % ble_address)
+        log.info("address = %s" % ble_address)
         self.base_cmd = wristband.gatt + " -t random -i " + \
             wristband.ble_host + " -b " + ble_address
 
         self.seq = 0
         self.udp_repeat = udp_repeat
-        if udp_repeat:
-            self.udp = udp_send.UDP_send(logging)
+        if self.udp_repeat:
+            self.udp = udp_send.UDP_send()
 
     def re_send(self, start):
         # send out on udp
         if self.udp_repeat:
             self.udp.re_send(start)
 
-        self.logger.info("sending %d" % start)
+        log.info("sending %d" % start)
         send = hex(start)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
         self.run_command(cmd)
@@ -51,7 +52,7 @@ class wristband():
         if self.udp_repeat:
             self.udp.send(start, end, seq)
 
-        self.logger.info("sending %d %d %d to wristband" % (start, end, seq))
+        log.info("sending %d %d %d to wristband" % (start, end, seq))
         send = hex(start)[2:].zfill(2) + \
             hex(end)[2:].zfill(2) + hex(seq)[2:].zfill(2)
         cmd = self.base_cmd + " --char-write --handle=0x0011 --value=" + send
@@ -65,7 +66,7 @@ class wristband():
         return int(hex_val, 16)
 
     def get(self):
-        self.logger.info("requesting data")
+        log.info("requesting data")
         cmd = self.base_cmd + " --char-read --handle=0x000e"
         data = self.run_command(cmd)
 
@@ -83,21 +84,21 @@ class wristband():
             batt_level = a_in / (R1 / (R1+R2))
             batt_level = round(batt_level, 2)
 
-            self.logger.info("raw = %d batt = %.2fv uptime = %ds" %
+            log.info("raw = %d batt = %.2fv uptime = %ds" %
                             (batt_adc, batt_level, uptime))
             return(batt_level, uptime)
         else:
             raise WB_Exception("problem parsing data: " + data)
 
     def run_command(self, cmd):
-        self.logger.info("waiting %d seconds for process" % self.timeout)
-        self.logger.debug(cmd)
+        log.info("waiting %d seconds for process" % self.timeout)
+        log.debug(cmd)
 
         # run with easyprocess
         proc=Proc(cmd).call(timeout=self.timeout)
 
         if proc.return_code == 0:
-            self.logger.info("success")
+            log.info("success")
             return proc.stdout
         elif proc.return_code == -15:
             # timed out
@@ -110,7 +111,6 @@ class wristband():
 
 if __name__ == '__main__':
     import argparse
-    import logging
     from ConfigParser import ConfigParser, NoSectionError
     config = ConfigParser()
     config.read('config.rc')
@@ -138,8 +138,8 @@ if __name__ == '__main__':
 
     try:
         # send start and end
-        s = wristband(logging, args.address,
-            udp_repeat=args.udp_repeat, timeout = args.timeout)
+        s = wristband(args.address, udp_repeat=args.udp_repeat,
+                        timeout = args.timeout)
         if args.resend:
             s.re_send(args.start)
         else:
@@ -148,4 +148,4 @@ if __name__ == '__main__':
         # get battery level and uptime
         s.get()
     except WB_Exception as e:
-        logging.error(e)
+        log.error(e)

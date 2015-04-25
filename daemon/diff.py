@@ -3,14 +3,16 @@ class to turn instant energy readings into energy differences from 1 to 4
 """
 
 import time
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class diff_energy():
     
     num_divs = 4  # relate the change as a number from 1 to num_divs
 
-    def __init__(self, logging, max_energy=3000, sens=50, max_time=30):
-        self.logging = logging
+    def __init__(self, max_energy=3000, sens=50, max_time=30):
         self.hist = None
         self.energy_per_div = max_energy / diff_energy.num_divs
         self.sens = sens  # in watts per second
@@ -51,17 +53,17 @@ class diff_energy():
 
         # too old
         if hist["t"] + self.max_time < now:
-            self.logging.debug("history too old")
+            log.debug("history too old")
             return energy
 
-        self.logging.debug("got hist t=%d e=%d" % (hist["t"],hist["e"]))
+        log.debug("got hist t=%d e=%d" % (hist["t"],hist["e"]))
 
         # differentiate
         diff = float(energy - hist["e"]) / (time.time() - hist["t"] )
         diff = abs(diff)
 
         # if not enough of a change
-        self.logging.debug("energy diff = %f" % diff)
+        log.debug("energy diff = %f" % diff)
         if diff < self.sens: 
             return energy
 
