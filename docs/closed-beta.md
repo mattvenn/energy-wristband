@@ -1,14 +1,14 @@
 # In the box
 
-* raspberry pi b+
-* raspberry pi b
+* Raspberry Pi b+
+* Raspberry Pi b
 * 2 x usb wifi dongle
-* 2 x usb bluetooth dongle
+* 2 x usb Bluetooth dongle
 * 2 x usb extender cable
 * 2 x sd card (master & repeater)
 * energy wristband & case
-* pi power supply
-* current cost monitor, sender and usb cable, power supply
+* Pi power supply
+* Current Cost monitor, sender and usb cable, power supply
 * manual
 
 ![parts](parts.png)
@@ -26,7 +26,7 @@
 
 charge the energy wristband with a micro usb cable
 
-## master pi
+## Master Pi
 
 This is the important one that connects to the current cost. Plug in:
 
@@ -45,14 +45,14 @@ meter'](http://www.currentcost.com/product-envi-installation.html)
 Check you're getting results on the LCD monitor. Connect the usb cable to the
 back of the current cost monitor.
 
-Plug in power to the pi.
+Plug in power to the Pi.
 
 ## Repeater Pi
 
 If you're having issues with Bluetooth range, we can use the 2nd Pi as a
 repeater.
 
-Because Bluetooth low energy is low range, we can use the second pi with the
+Because Bluetooth low energy is low range, we can use the second Pi with the
 repeater sd card to increase range. Plug in:
 
 * repeater sd card
