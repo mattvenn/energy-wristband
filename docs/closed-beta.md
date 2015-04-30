@@ -5,10 +5,13 @@
 * 2 x usb wifi dongle
 * 2 x usb bluetooth dongle
 * 2 x usb extender cable
-* 2 x sd card (master & slave)
-* energy wristband
+* 2 x sd card (master & repeater)
+* energy wristband & case
 * pi power supply
 * current cost monitor, sender and usb cable, power supply
+* manual
+
+![parts](parts.png)
 
 # Important notes
 
@@ -27,7 +30,7 @@ charge the energy wristband with a micro usb cable
 
 This is the important one that connects to the current cost. Plug in:
 
-* master sd card
+* master micro sd card
 * usb wifi
 * usb bluetooth on a usb extender cable
 * current cost usb cable
@@ -44,12 +47,15 @@ back of the current cost monitor.
 
 Plug in power to the pi.
 
-## Slave pi
+## Repeater Pi
 
-Because blue tooth low energy is low range, we use the second pi with the slave
-sd card to increase range. Plug in:
+If you're having issues with Bluetooth range, we can use the 2nd Pi as a
+repeater.
 
-* slave sd card
+Because Bluetooth low energy is low range, we can use the second pi with the
+repeater sd card to increase range. Plug in:
+
+* repeater sd card
 * usb wifi dongle
 * usb bluetooth dongle on usb extender cable
 * plug in power
