@@ -47,6 +47,7 @@ I'm looking for:
 * [project log](docs/project_log.md)
 * [Schematic and board design](https://github.com/mattvenn/eagle-circuit-designs/tree/master/energy-wristband)
 * [Firmware for wristband](./firmware/), including programming the wristband
+* [Instructions for beta testers](docs/closed-beta.md)
 * [Setting up and installation](docs/install.md)
 * [Python daemon](./daemon/) for energy monitoring and wristband communication
 

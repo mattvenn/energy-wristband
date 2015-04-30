@@ -1,3 +1,8 @@
+# Install
+
+This doc explains how the software was put together to create the images.
+It is intended for my reference and for people who want to build their own setups.
+
 # Raspberry Pi
 
 Assuming installing from a fresh raspbian.
