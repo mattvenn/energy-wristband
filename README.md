@@ -1,6 +1,7 @@
 # Energy Wristband
 
 ![wristbandcoversmall](https://cloud.githubusercontent.com/assets/128456/7890203/5ad3c75e-063c-11e5-849a-b749d4d3f688.jpg)
+
 Learning about home electrical energy usage with wearable electronics. *with amendments by @cheapjack*
 
 ## Introducing... the Energy Wristband
