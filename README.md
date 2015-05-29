@@ -40,7 +40,8 @@ I'm looking for:
 * Help organising workshops with schools.
 
 ## User Experience
-Find out how @cheapjack and his family lived with the Energy Wristband for a few months
+
+Find out how @cheapjack and his family [lived with the Energy Wristband for a few months](https://github.com/cheapjack/energy-wristband/tree/master/UserExperience)
 
 ## Links
 
