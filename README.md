@@ -1,6 +1,6 @@
 # Energy Wristband
 
-Learning about home electrical energy usage with wearable electronics.
+Learning about home electrical energy usage with wearable electronics. * with amendments by @cheapjack
 
 ## Introducing... the Energy Wristband
 
@@ -36,6 +36,9 @@ I'm looking for:
 * Money/Hours for 3D design/casting,
 * Help with promotion/marketing/funding,
 * Help organising workshops with schools.
+
+## User Experience
+Find out how @cheapjack and his family lived with the Energy Wristband for a few months
 
 ## Links
 
