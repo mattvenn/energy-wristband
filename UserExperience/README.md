@@ -1,6 +1,8 @@
 ##User Experience
 ###Cheapjack Feedback
 
+![felix with wristband image](https://github.com/cheapjack/cheapjack.github.io/blob/master/tumblr_files/tumblr_nk70a9PXSf1r2ybsso2_540.jpg)
+
 Aside from some initial setup issues of wifi with dongle on new pi (more to do with me only using wired in pi's) and finding and setting a max current value it was quite reliable but occasionally it would seem to go off for no apparent change in energy use. Of course it was hard to avoid sudden spikes in data or spikes in boiler useage from the Current Cost.
 
 We learnt as a family that the boiler pump was a hidden cost of the heating: it can come off and on at unexpected times and that the cost of dishwasher is higher than we expected.
