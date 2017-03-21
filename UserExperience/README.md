@@ -15,6 +15,7 @@ It did seem to be that sudden changes, not necessarily rises, in energy use trig
 
 I would say it very quickly becomes something that the children and adults just don't want to wear and the pester power element although exciting did make you eventually take it off. I started making a cover for it to protect the rumble pack and made a new lower profile wristband that seemed a bit more appealing to wear. I did wonder how allowing a choice of fabric band would be nice and could imagine it being rolled out and styled ergnomically like this [BluetoothLE device for tagging music](http://www.skute.me/)
 
+<img src="http://cheapjack.github.io/tumblr_files/tumblr_nk70a9PXSf1r2ybsso1_540.jpg" width="400">
 
 ### Old Habits Die Hard
 
@@ -23,6 +24,8 @@ As a family we ended up leaving it on the mantelpiece so that it could alert us 
 There were times that we just let it de-charge as it became an annoying notification to be very honest! After a while you are aware of energy use but override your money saving desires and the notification becomes unwanted. A week off and we were happy to have it on again; in a way can see how it could fade in and out of use; not every notification is wanted at all times, in the same way you can just not get around to changing central heating settings.
 
 I think something that could work is combining it with another 'use' like an ID tag that you need to have anyway; the tricky thing is having to keep wanting/needing to wear it I think; if it could have a parrallel use; like a mp3 player/torch/radio for example. The beauty of it is its low profile and ability to run from a pi; it appeals to the pi/arduino/oomlout using hobbyist and can see that this could potentially be a real potential market for it.
+
+<img src="http://cheapjack.github.io/tumblr_files/tumblr_nk70a9PXSf1r2ybsso3_540.jpg" width="400">
 
 ### Take Your Toys To Work
 
