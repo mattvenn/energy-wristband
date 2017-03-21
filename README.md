@@ -2,15 +2,15 @@
 
 ![wristbandcoversmall](https://cloud.githubusercontent.com/assets/128456/7890203/5ad3c75e-063c-11e5-849a-b749d4d3f688.jpg)
 
-Learning about home electrical energy usage with wearable electronics. *with amendments by @cheapjack*
+Learning about home electrical energy usage with wearable electronics.
 
 ## Introducing... the Energy Wristband
 
 A wristband that tells you energy changes in your home. It connects via a
 Raspberry Pi computer to a base station like a ['current cost' or
 similar](https://www.google.co.uk/search?q=energy+monitor&biw=1309&bih=739&source=lnms&tbm=isch&sa=X&ei=jlRiVP20K7eTsQT1sYCoBA&ved=0CAcQ_AUoAg).
-When a change in energy usage occurs, the wristband vibrates and a small LED
-bargraph shows your current usage from 1 to 4.
+
+When a change in energy usage occurs, the wristband vibrates and a small LED bargraph shows your current usage from 1 to 4.
 
 Realtime energy use can be queried by pressing the button.
 
@@ -27,17 +27,6 @@ could record changes in habits due to the wristband.
 
 Getting children involved is finally a good use for [pester
 power](http://en.wikipedia.org/wiki/Pester_power)!
-
-## Get involved
-
-I'm looking for:
-
-* A group of people interested in supporting and helping to test the idea.
-* Sponsorship in terms of kit (like radios, batteries, energy measurement base stations),
-* Money/Hours for electronics/software development time,
-* Money/Hours for 3D design/casting,
-* Help with promotion/marketing/funding,
-* Help organising workshops with schools.
 
 ## User Experience
 
