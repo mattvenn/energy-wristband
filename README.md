@@ -1,6 +1,8 @@
 # Energy Wristband
 
-Learning about home electrical energy usage with wearable electronics. * with amendments by @cheapjack
+![wristbandcoversmall](https://cloud.githubusercontent.com/assets/128456/7890203/5ad3c75e-063c-11e5-849a-b749d4d3f688.jpg)
+
+Learning about home electrical energy usage with wearable electronics. *with amendments by @cheapjack*
 
 ## Introducing... the Energy Wristband
 
@@ -38,7 +40,8 @@ I'm looking for:
 * Help organising workshops with schools.
 
 ## User Experience
-Find out how @cheapjack and his family lived with the Energy Wristband for a few months
+
+Find out how @cheapjack and his family [lived with the Energy Wristband for a few months](https://github.com/cheapjack/energy-wristband/tree/master/UserExperience)
 
 ## Links
 
